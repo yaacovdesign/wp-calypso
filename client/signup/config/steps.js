@@ -335,4 +335,20 @@ export default {
 		stepName: 'clone-cloning',
 		providesDependencies: [],
 	},
+
+	'business-information': {
+		stepName: 'business-information',
+		providesDependencies: [ 'businessInformation' ],
+	},
+
+	'business-add-ons': {
+		stepName: 'business-add-ons',
+		providesDependencies: [ 'businessAddOns' ],
+	},
+
+	style: {
+		stepName: 'style',
+		dependencies: [ 'themeSlugWithRepo' ],
+		providesDependencies: [ 'themeStyle' ],
+	},
 };
