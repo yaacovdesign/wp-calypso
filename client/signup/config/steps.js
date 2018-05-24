@@ -351,4 +351,15 @@ export default {
 		dependencies: [ 'themeSlugWithRepo' ],
 		providesDependencies: [ 'siteInformation' ],
 	},
+
+	'business-domains': {
+		stepName: 'domains',
+		apiRequestFunction: createSiteWithCart,
+		providesDependencies: [ 'siteId', 'siteSlug', 'domainItem', 'themeItem' ],
+		props: {
+			isDomainOnly: false,
+		},
+		dependencies: [ 'themeSlugWithRepo', 'siteInformation' ],
+		delayApiRequestUntilComplete: true,
+	},
 };
