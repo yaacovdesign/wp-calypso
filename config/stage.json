@@ -105,7 +105,7 @@
 		"reader": true,
 		"reader/conversations": true,
 		"reader/following-intro": true,
-		"reader/full-errors": true,
+		"reader/full-errors": false,
 		"reader/likes-hover": true,
 		"reader/nesting-arrow": true,
 		"reader/recommendations/posts": true,
