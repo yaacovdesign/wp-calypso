@@ -68,6 +68,7 @@ import {
 	hasXmlrpcError as hasXmlrpcErrorSelector,
 	isRemoteSiteOnSitesList,
 } from 'state/jetpack-connect/selectors';
+import getPartnerSlugFromQuery from 'state/selectors/get-partner-slug-from-query';
 
 /**
  * Constants
@@ -254,7 +255,7 @@ export class JetpackAuthorize extends Component {
 	}
 
 	shouldRedirectJetpackStart( props = this.props ) {
-		const { partnerSlug } = props.authQuery;
+		const { partnerSlug } = props;
 		const partnerRedirectFlag = config.isEnabled(
 			'jetpack/connect-redirect-pressable-credential-approval'
 		);
@@ -264,10 +265,6 @@ export class JetpackAuthorize extends Component {
 		// to wp-admin.
 		return partnerRedirectFlag ? partnerSlug && 'pressable' !== partnerSlug : partnerSlug;
 	}
-
-	handleClickHelp = () => {
-		this.props.recordTracksEvent( 'calypso_jpc_help_link_click' );
-	};
 
 	handleSignOut = () => {
 		const { recordTracksEvent } = this.props;
@@ -535,7 +532,8 @@ export class JetpackAuthorize extends Component {
 	}
 
 	getRedirectionTarget() {
-		const { clientId, homeUrl, partnerSlug, redirectAfterAuth } = this.props.authQuery;
+		const { clientId, homeUrl, redirectAfterAuth } = this.props.authQuery;
+		const { partnerSlug } = this.props;
 
 		// Redirect sites hosted on Pressable with a partner plan to some URL.
 		if (
@@ -584,7 +582,7 @@ export class JetpackAuthorize extends Component {
 					{ translate( 'Create a new account' ) }
 				</LoggedOutFormLinkItem>
 				<JetpackConnectHappychatButton eventName="calypso_jpc_authorize_chat_initiated">
-					<HelpButton onClick={ this.handleClickHelp } />
+					<HelpButton />
 				</JetpackConnectHappychatButton>
 			</LoggedOutFormLinks>
 		);
@@ -622,9 +620,8 @@ export class JetpackAuthorize extends Component {
 	}
 
 	render() {
-		const { partnerSlug } = this.props.authQuery;
 		return (
-			<MainWrapper partnerSlug={ partnerSlug }>
+			<MainWrapper>
 				<div className="jetpack-connect__authorize-form">
 					<div className="jetpack-connect__logged-in-form">
 						<QueryUserConnection
@@ -666,6 +663,7 @@ export default connect(
 			mobileAppRedirect,
 			user: getCurrentUser( state ),
 			userAlreadyConnected: getUserAlreadyConnected( state ),
+			partnerSlug: getPartnerSlugFromQuery( state ),
 		};
 	},
 	{

@@ -8,25 +8,26 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { localize, moment } from 'i18n-calypso';
+import { get } from 'lodash';
 
 /**
  * Internal dependencies
  */
 import Button from 'components/button';
 import DocumentHead from 'components/data/document-head';
+import getGoogleMyBusinessConnectedLocation from 'state/selectors/get-google-my-business-connected-location';
 import GoogleMyBusinessLocation from 'my-sites/google-my-business/location';
 import GoogleMyBusinessStatsChart from 'my-sites/google-my-business/stats/chart';
-import GoogleMyBusinessStatsTip from 'my-sites/google-my-business/stats/tip';
 import Main from 'components/main';
+import Notice from 'components/notice';
 import PageViewTracker from 'lib/analytics/page-view-tracker';
-import SectionHeader from 'components/section-header';
+import QueryKeyringConnections from 'components/data/query-keyring-connections';
+import QuerySiteKeyrings from 'components/data/query-site-keyrings';
 import SidebarNavigation from 'my-sites/sidebar-navigation';
 import StatsNavigation from 'blocks/stats-navigation';
+import { enhanceWithSiteType, recordTracksEvent } from 'state/analytics/actions';
 import { getSelectedSiteSlug, getSelectedSiteId } from 'state/ui/selectors';
-import { recordTracksEvent } from 'state/analytics/actions';
-import { getGoogleMyBusinessConnectedLocation } from 'state/selectors';
-import QuerySiteSettings from 'components/data/query-site-settings';
-import QueryKeyringConnections from 'components/data/query-keyring-connections';
+import { withEnhancers } from 'state/utils';
 
 class GoogleMyBusinessStats extends Component {
 	static propTypes = {
@@ -112,19 +113,6 @@ class GoogleMyBusinessStats extends Component {
 						} }
 						renderTooltipForDatanum={ this.renderSearchTooltipForDatanum }
 					/>
-					<SectionHeader label={ translate( 'How customers search for your business' ) } />
-				</div>
-
-				<div className="gmb-stats__metric">
-					<GoogleMyBusinessStatsTip
-						buttonHref="https://business.google.com/"
-						buttonText={ translate( 'Post Photos' ) }
-						eventName="calypso_google_my_business_stats_post_photos_button_click"
-						illustration="reviews"
-						text={ translate(
-							'Listings with recent photos typically drive more view to their business websites.'
-						) }
-					/>
 				</div>
 
 				<div className="gmb-stats__metric">
@@ -167,36 +155,12 @@ class GoogleMyBusinessStats extends Component {
 						} }
 					/>
 				</div>
-
-				<div className="gmb-stats__metric">
-					<GoogleMyBusinessStatsTip
-						buttonHref="https://business.google.com/"
-						buttonText={ translate( 'Complete Your Listing' ) }
-						eventName="calypso_google_my_business_stats_complete_your_listing_button_click"
-						illustration="complete-listing"
-						text={ translate(
-							'Complete business listings get on average 7x more clicks than empty listings.'
-						) }
-					/>
-				</div>
-
-				<div className="gmb-stats__metric">
-					<GoogleMyBusinessStatsTip
-						buttonHref="https://business.google.com/"
-						buttonText={ translate( 'Complete Your Listing' ) }
-						eventName="calypso_google_my_business_stats_complete_your_listing_button_click"
-						illustration="compare"
-						text={ translate(
-							'Customers compare business listings on Google to make decisions. Make your listing count.'
-						) }
-					/>
-				</div>
 			</div>
 		);
 	}
 
 	render() {
-		const { locationData, siteId, siteSlug, translate } = this.props;
+		const { isLocationVerified, locationData, siteId, siteSlug, translate } = this.props;
 
 		return (
 			<Main wideLayout>
@@ -211,8 +175,29 @@ class GoogleMyBusinessStats extends Component {
 
 				<StatsNavigation selectedItem={ 'googleMyBusiness' } siteId={ siteId } slug={ siteSlug } />
 
-				{ siteId && <QuerySiteSettings siteId={ siteId } /> }
+				{ siteId && <QuerySiteKeyrings siteId={ siteId } /> }
 				<QueryKeyringConnections />
+
+				{ ! isLocationVerified && (
+					<Notice
+						status="is-error"
+						text={ translate(
+							'Your location has not been verified. ' +
+								'Statistics are not available until you have {{a}}verified your location{{/a}} with Google.',
+							{
+								components: {
+									a: (
+										<a
+											href="https://support.google.com/business/answer/7107242"
+											target="_blank"
+											rel="noopener noreferrer"
+										/>
+									),
+								},
+							}
+						) }
+					/>
+				) }
 
 				<GoogleMyBusinessLocation location={ locationData }>
 					<Button
@@ -234,13 +219,16 @@ export default connect(
 	state => {
 		const siteId = getSelectedSiteId( state );
 		const locationData = getGoogleMyBusinessConnectedLocation( state, siteId );
+		const isLocationVerified = get( locationData, 'meta.state.isVerified', false );
+
 		return {
+			isLocationVerified,
 			locationData,
 			siteId,
 			siteSlug: getSelectedSiteSlug( state ),
 		};
 	},
 	{
-		recordTracksEvent,
+		recordTracksEvent: withEnhancers( recordTracksEvent, enhanceWithSiteType ),
 	}
 )( localize( GoogleMyBusinessStats ) );

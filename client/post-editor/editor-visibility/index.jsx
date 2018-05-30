@@ -6,7 +6,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { find } from 'lodash';
+import { find, get } from 'lodash';
 import classNames from 'classnames';
 import Gridicon from 'gridicons';
 import { connect } from 'react-redux';
@@ -26,15 +26,17 @@ import { recordEvent, recordStat } from 'lib/posts/stats';
 import { tracks } from 'lib/analytics';
 import accept from 'lib/accept';
 import { editPost } from 'state/posts/actions';
+import { getEditedPost, getSitePost } from 'state/posts/selectors';
 import { getSelectedSiteId } from 'state/ui/selectors';
 import { getEditorPostId } from 'state/ui/editor/selectors';
-import { isPrivateSite as isPrivateSiteSelector } from 'state/selectors';
+import isPrivateSiteSelector from 'state/selectors/is-private-site';
 
 class EditorVisibility extends React.Component {
 	static propTypes = {
 		context: PropTypes.string,
 		onPrivatePublish: PropTypes.func,
 		isPrivateSite: PropTypes.bool,
+		hasPost: PropTypes.bool,
 		type: PropTypes.string,
 		status: PropTypes.string,
 		password: PropTypes.string,
@@ -77,13 +79,6 @@ class EditorVisibility extends React.Component {
 		return 'public';
 	};
 
-	updatePostStatus = () => {
-		const defaultVisibility = 'draft' === this.props.status ? 'draft' : 'publish';
-		const postEdits = { status: defaultVisibility };
-
-		postActions.edit( postEdits );
-	};
-
 	recordStats = newVisibility => {
 		if ( this.getVisibility() !== newVisibility ) {
 			recordStat( 'visibility-set-' + newVisibility );
@@ -95,37 +90,35 @@ class EditorVisibility extends React.Component {
 		}
 	};
 
-	updateVisibility = newVisibility => {
-		const { siteId, postId } = this.props;
-		let reduxPostEdits;
+	updateVisibility( newVisibility ) {
+		const { siteId, postId, status } = this.props;
+
+		// This is necessary for cases when the post is changed from private
+		// to another visibility since private has its own post status.
+		const newStatus = status === 'draft' ? 'draft' : 'publish';
+
+		const postEdits = { status: newStatus };
 
 		switch ( newVisibility ) {
 			case 'public':
-				reduxPostEdits = { password: '' };
+				postEdits.password = '';
 				break;
 
 			case 'password':
-				reduxPostEdits = {
-					password: this.props.savedPassword || ' ',
-					// Password protected posts cannot be sticky
-					sticky: false,
-				};
+				postEdits.password = this.props.savedPassword || ' ';
+				// Password protected posts cannot be sticky
+				postEdits.sticky = false;
 				this.setState( { passwordIsValid: true } );
 				break;
 		}
 
+		// Make sure that status edits are applied both to Flux and Redux stores
+		postActions.edit( { status: newStatus } );
+		this.props.editPost( siteId, postId, postEdits );
 		this.recordStats( newVisibility );
+	}
 
-		// This is necessary for cases when the post is changed from private to another visibility
-		// since private has its own post status.
-		this.updatePostStatus();
-
-		if ( reduxPostEdits ) {
-			this.props.editPost( siteId, postId, reduxPostEdits );
-		}
-	};
-
-	setPostToPrivate = () => {
+	setPostToPrivate() {
 		const { siteId, postId } = this.props;
 		// TODO: REDUX - remove flux actions when whole post-editor is reduxified
 		postActions.edit( {
@@ -134,12 +127,13 @@ class EditorVisibility extends React.Component {
 
 		// Private posts cannot be sticky
 		this.props.editPost( siteId, postId, {
+			status: 'private',
 			password: '',
 			sticky: false,
 		} );
 
 		this.recordStats( 'private' );
-	};
+	}
 
 	onPrivatePublish = () => {
 		this.setPostToPrivate();
@@ -189,7 +183,6 @@ class EditorVisibility extends React.Component {
 			newPassword = ' ';
 		}
 
-		// TODO: REDUX - remove flux actions when whole post-editor is reduxified
 		this.props.editPost( siteId, postId, { password: newPassword } );
 	};
 
@@ -285,6 +278,11 @@ class EditorVisibility extends React.Component {
 	};
 
 	render() {
+		// don't render anything until the edited post is loaded
+		if ( ! this.props.hasPost ) {
+			return null;
+		}
+
 		const visibility = this.getVisibility();
 		const classes = classNames( 'editor-visibility', {
 			'is-touch': hasTouch(),
@@ -298,12 +296,19 @@ export default connect(
 	state => {
 		const siteId = getSelectedSiteId( state );
 		const postId = getEditorPostId( state );
-		const isPrivateSite = isPrivateSiteSelector( state, siteId );
+		const currentPost = getSitePost( state, siteId, postId );
+		const post = getEditedPost( state, siteId, postId );
 
 		return {
 			siteId,
 			postId,
-			isPrivateSite,
+			hasPost: !! post,
+			type: get( post, 'type', null ),
+			status: get( post, 'status', 'draft' ),
+			password: get( post, 'password', null ),
+			savedStatus: get( currentPost, 'status', null ),
+			savedPassword: get( currentPost, 'password', null ),
+			isPrivateSite: isPrivateSiteSelector( state, siteId ),
 		};
 	},
 	{ editPost }

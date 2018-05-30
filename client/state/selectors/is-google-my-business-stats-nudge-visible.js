@@ -1,16 +1,15 @@
 /** @format */
 
 /**
+ * External dependencies
+ */
+import { find, get } from 'lodash';
+
+/**
  * Internal dependencies
  */
-import {
-	isGoogleMyBusinessLocationConnected,
-	isSiteGoogleMyBusinessEligible,
-	getSiteOptions,
-} from 'state/selectors';
-import { isRequestingSiteSettings, getSiteSettings } from 'state/site-settings/selectors';
-import versionCompare from 'lib/version-compare';
-import { isJetpackSite } from 'state/sites/selectors';
+import isSiteGoogleMyBusinessEligible from 'state/selectors/is-site-google-my-business-eligible';
+import { isRequestingSiteKeyrings, getSiteKeyrings } from 'state/site-keyrings/selectors';
 
 /**
  * Returns true if the Google My Business (GMB) nudge should be visible in stats
@@ -26,21 +25,18 @@ export default function isGoogleMyBusinessStatsNudgeVisible( state, siteId ) {
 	// We don't want to show the nudge, and then hide it when it's obvious
 	// the site is actually already connected, therefore we must wait for the site
 	// settings to be fetched so we could verify site does not have connection connected
-	if ( getSiteSettings( state, siteId ) === null || isRequestingSiteSettings( state, siteId ) ) {
+	if ( getSiteKeyrings( state, siteId ) === null || isRequestingSiteKeyrings( state, siteId ) ) {
 		return false;
 	}
 
-	if ( isGoogleMyBusinessLocationConnected( state, siteId ) ) {
-		return false;
-	}
+	// Don't show the nudge if the site is already connected (can be from another admin)
+	const siteKeyrings = get( state, `siteKeyrings.items.${ siteId }`, [] );
+	const googleMyBusinessSiteKeyring = find(
+		siteKeyrings,
+		keyring => keyring.service === 'google_my_business'
+	);
 
-	// Jetpack site needs to be at least version 6.1 for us to be able to modify site settings
-	const siteOptions = getSiteOptions( state, siteId );
-
-	if (
-		isJetpackSite( state, siteId ) &&
-		! versionCompare( siteOptions.jetpack_version, '6.1.1', '>=' )
-	) {
+	if ( googleMyBusinessSiteKeyring ) {
 		return false;
 	}
 

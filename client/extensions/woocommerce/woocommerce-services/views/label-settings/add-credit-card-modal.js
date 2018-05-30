@@ -1,3 +1,5 @@
+/** @format */
+
 /**
  * External dependencies
  */
@@ -12,7 +14,6 @@ import { curry } from 'lodash';
  * Internal dependencies
  */
 import Dialog from 'components/dialog';
-import HeaderCake from 'components/header-cake';
 import { closeAddCardDialog } from 'woocommerce/woocommerce-services/state/label-settings/actions';
 import { getLabelSettingsForm } from 'woocommerce/woocommerce-services/state/label-settings/selectors';
 import CreditCardForm from 'blocks/credit-card-form';
@@ -48,13 +49,14 @@ class AddCardDialog extends Component {
 				isVisible={ isVisible }
 				onClose={ onClose }
 			>
-				<HeaderCake onClick={ onClose }>{ translate( 'Add Credit Card' ) }</HeaderCake>
 				<CreditCardForm
 					createCardToken={ this.createCardToken }
 					recordFormSubmitEvent={ this.recordFormSubmitEvent }
 					saveStoredCard={ this.props.addStoredCard }
 					successCallback={ onClose }
 					showUsedForExistingPurchasesInfo={ true }
+					heading={ translate( 'Add credit card' ) }
+					onCancel={ onClose }
 				/>
 			</Dialog>
 		);
@@ -68,7 +70,7 @@ const mapStateToProps = ( state, { siteId } ) => {
 	};
 };
 
-const mapDispatchToProps = ( dispatch ) => {
+const mapDispatchToProps = dispatch => {
 	return bindActionCreators( { closeAddCardDialog, addStoredCard }, dispatch );
 };
 

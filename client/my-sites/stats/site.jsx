@@ -33,9 +33,9 @@ import { getSiteOption, isJetpackSite } from 'state/sites/selectors';
 import { recordGoogleEvent } from 'state/analytics/actions';
 import PrivacyPolicyBanner from 'blocks/privacy-policy-banner';
 import ChecklistBanner from './checklist-banner';
-import QuerySiteSettings from 'components/data/query-site-settings';
+import QuerySiteKeyrings from 'components/data/query-site-keyrings';
 import GoogleMyBusinessStatsNudge from 'blocks/google-my-business-stats-nudge';
-import { isGoogleMyBusinessStatsNudgeVisible as isGoogleMyBusinessStatsNudgeVisibleSelector } from 'state/selectors';
+import isGoogleMyBusinessStatsNudgeVisibleSelector from 'state/selectors/is-google-my-business-stats-nudge-visible';
 
 class StatsSite extends Component {
 	constructor( props ) {
@@ -135,7 +135,7 @@ class StatsSite extends Component {
 
 		return (
 			<Main wideLayout={ true }>
-				<QuerySiteSettings siteId={ siteId } />
+				{ siteId && <QuerySiteKeyrings siteId={ siteId } /> }
 				<DocumentHead title={ translate( 'Stats' ) } />
 				<PageViewTracker
 					path={ `/stats/${ period }/:site` }

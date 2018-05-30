@@ -9,32 +9,38 @@ import page from 'page';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Gridicon from 'gridicons';
-import { get } from 'lodash';
 
 /**
  * Internal dependencies
  */
 import ActionCard from 'components/action-card';
 import Button from 'components/button';
+import canCurrentUser from 'state/selectors/can-current-user';
 import Card from 'components/card';
 import CardHeading from 'components/card-heading';
 import config from 'config';
 import DocumentHead from 'components/data/document-head';
 import ExternalLink from 'components/external-link';
-import { getSelectedSiteId, getSelectedSiteSlug } from 'state/ui/selectors';
+import getGoogleMyBusinessLocations from 'state/selectors/get-google-my-business-locations';
 import HeaderCake from 'components/header-cake';
 import KeyringConnectButton from 'blocks/keyring-connect-button';
 import Main from 'components/main';
 import PageViewTracker from 'lib/analytics/page-view-tracker';
-import { canCurrentUser, getGoogleMyBusinessLocations } from 'state/selectors';
-import { recordTracksEvent } from 'state/analytics/actions';
-import QuerySiteSettings from 'components/data/query-site-settings';
 import QueryKeyringConnections from 'components/data/query-keyring-connections';
+import QuerySiteKeyrings from 'components/data/query-site-keyrings';
+import { enhanceWithLocationCounts } from 'my-sites/google-my-business/utils';
+import { enhanceWithSiteType, recordTracksEvent } from 'state/analytics/actions';
+import { getSelectedSiteId, getSelectedSiteSlug } from 'state/ui/selectors';
+import { isJetpackSite } from 'state/sites/selectors';
+import { withEnhancers } from 'state/utils';
 
 class GoogleMyBusinessSelectBusinessType extends Component {
 	static propTypes = {
+		locations: PropTypes.array.isRequired,
 		recordTracksEvent: PropTypes.func.isRequired,
+		recordTracksEventWithLocationCounts: PropTypes.func.isRequired,
 		siteId: PropTypes.number,
+		siteIsJetpack: PropTypes.bool.isRequired,
 		siteSlug: PropTypes.string,
 		translate: PropTypes.func.isRequired,
 	};
@@ -44,34 +50,34 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 	};
 
 	handleConnect = () => {
-		const { googleMyBusinessLocations, siteSlug } = this.props;
+		const { locations, siteSlug } = this.props;
 
-		const locationCount = googleMyBusinessLocations.length;
-		const verifiedLocationCount = googleMyBusinessLocations.filter( location => {
-			return get( location, 'meta.state.isVerified', false );
-		} ).length;
+		this.props.recordTracksEventWithLocationCounts(
+			'calypso_google_my_business_select_business_type_connect'
+		);
 
-		this.props.recordTracksEvent( 'calypso_google_my_business_select_business_type_connect', {
-			location_count: locationCount,
-			verified_location_count: verifiedLocationCount,
-		} );
-
-		if ( locationCount === 0 ) {
+		if ( locations.length === 0 ) {
 			page.redirect( `/google-my-business/new/${ siteSlug }` );
 		} else {
 			page.redirect( `/google-my-business/select-location/${ siteSlug }` );
 		}
 	};
 
-	trackCreateYourListingClick = () => {
+	trackCreateListingClick = () => {
 		this.props.recordTracksEvent(
-			'calypso_google_my_business_select_business_type_create_my_listing_button_click'
+			'calypso_google_my_business_select_business_type_create_listing_button_click'
 		);
 	};
 
-	trackOptimizeYourSEOClick = () => {
+	trackConnectToGoogleMyBusinessClick = () => {
 		this.props.recordTracksEvent(
-			'calypso_google_my_business_select_business_type_optimize_your_seo_button_click'
+			'calypso_google_my_business_select_business_type_connect_to_google_my_business_button_click'
+		);
+	};
+
+	trackLearnMoreAboutSEOClick = () => {
+		this.props.recordTracksEvent(
+			'calypso_google_my_business_select_business_type_learn_more_about_seo_button_click'
 		);
 	};
 
@@ -90,11 +96,13 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 			connectButton = (
 				<KeyringConnectButton
 					serviceId="google_my_business"
-					onClick={ this.trackCreateYourListingClick }
+					onClick={ this.trackConnectToGoogleMyBusinessClick }
 					onConnect={ this.handleConnect }
+					primary
 				>
-					{ translate( 'Create Your Listing', {
-						comment: 'Call to Action to add a business listing to Google My Business',
+					{ translate( 'Connect to Google My Business', {
+						comment:
+							'Call to Action to connect the site to a business listing in Google My Business',
 					} ) }
 				</KeyringConnectButton>
 			);
@@ -104,16 +112,15 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 					primary
 					href="https://business.google.com/create"
 					target="_blank"
-					onClick={ this.trackCreateYourListingClick }
+					onClick={ this.trackCreateListingClick }
 				>
-					{ translate( 'Create Your Listing', {
+					{ translate( 'Create Listing', {
 						comment: 'Call to Action to add a business listing to Google My Business',
 					} ) }{' '}
 					<Gridicon icon="external" />
 				</Button>
 			);
 		}
-
 		return (
 			<ActionCard
 				headerText={ translate( 'Physical Location or Service Area', {
@@ -130,7 +137,11 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 	}
 
 	renderOnlineBusinessCard() {
-		const { siteSlug, translate } = this.props;
+		const { siteIsJetpack, translate } = this.props;
+
+		const seoHelpLink = siteIsJetpack
+			? 'https://jetpack.com/support/seo-tools/'
+			: 'https://en.blog.wordpress.com/2013/03/22/seo-on-wordpress-com/';
 
 		return (
 			<ActionCard
@@ -140,9 +151,11 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 				mainText={ translate(
 					"Don't provide in-person services? Learn more about reaching your customers online."
 				) }
-				buttonText={ translate( 'Optimize Your SEO', { comment: 'Call to Action button' } ) }
-				buttonHref={ `/settings/traffic/${ siteSlug }` }
-				buttonOnClick={ this.trackOptimizeYourSEOClick }
+				buttonTarget="_blank"
+				buttonText={ translate( 'Learn More about SEO', { comment: 'Call to Action button' } ) }
+				buttonHref={ seoHelpLink }
+				buttonIcon="external"
+				buttonOnClick={ this.trackLearnMoreAboutSEOClick }
 			/>
 		);
 	}
@@ -159,7 +172,7 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 
 				<DocumentHead title={ translate( 'Google My Business' ) } />
 
-				<QuerySiteSettings siteId={ siteId } />
+				<QuerySiteKeyrings siteId={ siteId } />
 				<QueryKeyringConnections />
 
 				<HeaderCake isCompact={ false } alwaysShowActionText={ false } onClick={ this.goBack }>
@@ -175,7 +188,7 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 						<p>
 							{ translate(
 								'{{link}}Google My Business{{/link}} lists your local business on Google Search and Google Maps. ' +
-									'It works for businesses that have a physical location or serve a local area.',
+									'It works for businesses that have a physical location, or serve a local area.',
 								{
 									components: {
 										link: (
@@ -211,14 +224,20 @@ class GoogleMyBusinessSelectBusinessType extends Component {
 export default connect(
 	state => {
 		const siteId = getSelectedSiteId( state );
+
 		return {
-			googleMyBusinessLocations: getGoogleMyBusinessLocations( state, siteId ),
+			locations: getGoogleMyBusinessLocations( state, siteId ),
 			canUserManageOptions: canCurrentUser( state, siteId, 'manage_options' ),
 			siteId,
+			siteIsJetpack: isJetpackSite( state, siteId ),
 			siteSlug: getSelectedSiteSlug( state ),
 		};
 	},
 	{
-		recordTracksEvent,
+		recordTracksEvent: withEnhancers( recordTracksEvent, enhanceWithSiteType ),
+		recordTracksEventWithLocationCounts: withEnhancers( recordTracksEvent, [
+			enhanceWithLocationCounts,
+			enhanceWithSiteType,
+		] ),
 	}
 )( localize( GoogleMyBusinessSelectBusinessType ) );

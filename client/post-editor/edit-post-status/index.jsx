@@ -21,10 +21,10 @@ import { recordStat, recordEvent } from 'lib/posts/stats';
 import { editPost } from 'state/posts/actions';
 import { getSelectedSiteId } from 'state/ui/selectors';
 import { getEditorPostId } from 'state/ui/editor/selectors';
-import { getEditedPost } from 'state/posts/selectors';
+import { getEditedPost, getSitePost } from 'state/posts/selectors';
 import EditorPublishDate from 'post-editor/editor-publish-date';
 import EditorVisibility from 'post-editor/editor-visibility';
-import { canCurrentUser } from 'state/selectors';
+import canCurrentUser from 'state/selectors/can-current-user';
 
 export class EditPostStatus extends Component {
 	static propTypes = {
@@ -32,14 +32,9 @@ export class EditPostStatus extends Component {
 		setPostDate: PropTypes.func,
 		onSave: PropTypes.func,
 		post: PropTypes.object,
-		savedPost: PropTypes.object,
-		site: PropTypes.object,
+		currentPost: PropTypes.object,
 		translate: PropTypes.func,
-		type: PropTypes.string,
-		postDate: PropTypes.string,
 		onPrivatePublish: PropTypes.func,
-		status: PropTypes.string,
-		isPostPrivate: PropTypes.bool,
 		confirmationSidebarStatus: PropTypes.string,
 	};
 
@@ -78,60 +73,55 @@ export class EditPostStatus extends Component {
 	};
 
 	render() {
-		let isSticky, isPublished, isPending, isScheduled, isPasswordProtected;
-		const { translate, isPostPrivate, canUserPublishPosts } = this.props;
+		const { translate, canUserPublishPosts, post, currentPost } = this.props;
 
-		if ( this.props.post ) {
-			isPasswordProtected = postUtils.getVisibility( this.props.post ) === 'password';
-			isSticky = this.props.post.sticky;
-			isPending = postUtils.isPending( this.props.post );
-			isPublished = postUtils.isPublished( this.props.savedPost );
-			isScheduled = this.props.savedPost && this.props.savedPost.status === 'future';
-		}
+		const isPending = postUtils.isPending( post );
+		const isPrivate = postUtils.isPrivate( post );
+		const isPasswordProtected = postUtils.getVisibility( post ) === 'password';
+		const isPublished = postUtils.isPublished( currentPost );
+		const isScheduled = postUtils.isScheduled( currentPost );
 
+		const showSticky = post && post.type === 'post' && ! isPrivate && ! isPasswordProtected;
+		const showPending = post && ! isPublished && ! isScheduled && canUserPublishPosts;
+		const showRevertToDraft = isPublished || isScheduled || ( isPending && ! canUserPublishPosts );
+
+		/* TODO: fix the label a11y and enable the ESLint rule again */
+		/* eslint-disable jsx-a11y/label-has-for */
 		return (
 			<div className="edit-post-status">
 				{ this.renderPostScheduling() }
 				{ this.renderPostVisibility() }
-				{ this.props.type === 'post' &&
-					! isPostPrivate &&
-					! isPasswordProtected && (
-						<label className="edit-post-status__sticky">
-							<span className="edit-post-status__label-text">
-								{ translate( 'Stick to the front page' ) }
-								<InfoPopover
-									position="top right"
-									gaEventCategory="Editor"
-									popoverName="Sticky Post"
-								>
-									{ translate( 'Sticky posts will appear at the top of the posts listing.' ) }
-								</InfoPopover>
-							</span>
-							<FormToggle
-								checked={ isSticky }
-								onChange={ this.toggleStickyStatus }
-								aria-label={ translate( 'Stick post to the front page' ) }
-							/>
-						</label>
-					) }
-				{ ! isPublished &&
-					! isScheduled &&
-					canUserPublishPosts && (
-						<label className="edit-post-status__pending-review">
-							<span className="edit-post-status__label-text">
-								{ translate( 'Pending review' ) }
-								<InfoPopover position="top right">
-									{ translate( 'Flag this post to be reviewed for approval.' ) }
-								</InfoPopover>
-							</span>
-							<FormToggle
-								checked={ isPending }
-								onChange={ this.togglePendingStatus }
-								aria-label={ translate( 'Request review for post' ) }
-							/>
-						</label>
-					) }
-				{ ( isPublished || isScheduled || ( isPending && ! canUserPublishPosts ) ) && (
+				{ showSticky && (
+					<label className="edit-post-status__sticky">
+						<span className="edit-post-status__label-text">
+							{ translate( 'Stick to the front page' ) }
+							<InfoPopover position="top right" gaEventCategory="Editor" popoverName="Sticky Post">
+								{ translate( 'Sticky posts will appear at the top of the posts listing.' ) }
+							</InfoPopover>
+						</span>
+						<FormToggle
+							checked={ post.sticky }
+							onChange={ this.toggleStickyStatus }
+							aria-label={ translate( 'Stick post to the front page' ) }
+						/>
+					</label>
+				) }
+				{ showPending && (
+					<label className="edit-post-status__pending-review">
+						<span className="edit-post-status__label-text">
+							{ translate( 'Pending review' ) }
+							<InfoPopover position="top right">
+								{ translate( 'Flag this post to be reviewed for approval.' ) }
+							</InfoPopover>
+						</span>
+						<FormToggle
+							checked={ isPending }
+							onChange={ this.togglePendingStatus }
+							aria-label={ translate( 'Request review for post' ) }
+						/>
+					</label>
+				) }
+				{ showRevertToDraft && (
 					<Button
 						className="edit-post-status__revert-to-draft"
 						onClick={ this.revertToDraft }
@@ -142,6 +132,7 @@ export class EditPostStatus extends Component {
 				) }
 			</div>
 		);
+		/* eslint-enable jsx-a11y/label-has-for */
 	}
 
 	renderPostScheduling() {
@@ -149,30 +140,15 @@ export class EditPostStatus extends Component {
 	}
 
 	renderPostVisibility() {
-		if ( ! this.props.post ) {
-			return;
-		}
-
 		// Do not render the editor visibility component on both the editor sidebar and the confirmation sidebar
 		// at the same time so that it is predictable which one gets the focus / shows the validation error message.
 		if ( 'open' === this.props.confirmationSidebarStatus ) {
 			return;
 		}
 
-		const { password, type } = this.props.post || {};
-		const savedStatus = this.props.savedPost ? this.props.savedPost.status : null;
-		const savedPassword = this.props.savedPost ? this.props.savedPost.password : null;
-		const props = {
-			status: this.props.status,
-			onPrivatePublish: this.props.onPrivatePublish,
-			type,
-			password,
-			savedStatus,
-			savedPassword,
-			context: 'post-settings',
-		};
-
-		return <EditorVisibility { ...props } />;
+		return (
+			<EditorVisibility onPrivatePublish={ this.props.onPrivatePublish } context="post-settings" />
+		);
 	}
 }
 
@@ -181,12 +157,14 @@ export default connect(
 		const siteId = getSelectedSiteId( state );
 		const postId = getEditorPostId( state );
 		const post = getEditedPost( state, siteId, postId );
+		const currentPost = getSitePost( state, siteId, postId );
 		const canUserPublishPosts = canCurrentUser( state, siteId, 'publish_posts' );
 
 		return {
 			siteId,
 			postId,
 			post,
+			currentPost,
 			canUserPublishPosts,
 		};
 	},

@@ -4,48 +4,27 @@
  * Internal dependencies
  */
 import {
+	GOOGLE_MY_BUSINESS_STATS_FAILURE,
 	GOOGLE_MY_BUSINESS_STATS_RECEIVE,
 	GOOGLE_MY_BUSINESS_STATS_REQUEST,
 } from 'state/action-types';
-import { saveSiteSettings } from 'state/site-settings/actions';
+import { saveSiteKeyring, deleteSiteKeyring } from 'state/site-keyrings/actions';
 
 export const connectGoogleMyBusinessLocation = (
 	siteId,
 	keyringConnectionId,
 	locationId
-) => dispatch => {
-	return dispatch(
-		saveSiteSettings( siteId, {
-			google_my_business_keyring_id: keyringConnectionId,
-			google_my_business_location_id: locationId,
+) => dispatch =>
+	dispatch(
+		saveSiteKeyring( siteId, {
+			keyring_id: keyringConnectionId,
+			external_user_id: locationId,
+			service: 'google_my_business',
 		} )
-	).then( ( { updated } ) => {
-		if (
-			! updated.hasOwnProperty( 'google_my_business_keyring_id' ) &&
-			! updated.hasOwnProperty( 'google_my_business_location_id' )
-		) {
-			return Promise.reject();
-		}
-		return Promise.resolve();
-	} );
-};
+	);
 
-export const disconnectGoogleMyBusinessLocation = siteId => dispatch => {
-	return dispatch(
-		saveSiteSettings( siteId, {
-			google_my_business_keyring_id: false,
-			google_my_business_location_id: false,
-		} )
-	).then( ( { updated } ) => {
-		if (
-			! updated.hasOwnProperty( 'google_my_business_keyring_id' ) &&
-			! updated.hasOwnProperty( 'google_my_business_location_id' )
-		) {
-			return Promise.reject();
-		}
-		return Promise.resolve();
-	} );
-};
+export const disconnectGoogleMyBusinessLocation = ( siteId, keyringSiteId ) => dispatch =>
+	dispatch( deleteSiteKeyring( siteId, keyringSiteId ) );
 
 export const requestGoogleMyBusinessStats = (
 	siteId,
@@ -67,4 +46,19 @@ export const receiveGoogleMyBusinessStats = ( siteId, statType, interval, aggreg
 	interval,
 	aggregation,
 	data,
+} );
+
+export const failedRequestGoogleMyBusinessStats = (
+	siteId,
+	statType,
+	interval,
+	aggregation,
+	error
+) => ( {
+	type: GOOGLE_MY_BUSINESS_STATS_FAILURE,
+	siteId,
+	statType,
+	interval,
+	aggregation,
+	error,
 } );

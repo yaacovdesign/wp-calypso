@@ -3,8 +3,8 @@ export default {
 	multiyearSubscriptions: {
 		datestamp: '20180417',
 		variations: {
-			show: 20,
-			hide: 80,
+			show: 50,
+			hide: 50,
 		},
 		defaultVariation: 'hide',
 		allowExistingUsers: true,
@@ -100,12 +100,22 @@ export default {
 		},
 		defaultVariation: 'original',
 	},
-	signupDomainStrikethruPrice: {
-		datestamp: '20180507',
+	domainSearchFilterOnClose: {
+		datestamp: '20180524',
 		variations: {
-			enabled: 50,
 			disabled: 50,
+			enabled: 50,
 		},
 		defaultVariation: 'disabled',
+	},
+	domainSuggestionKrakenV321: {
+		datestamp: '20180524',
+		variations: {
+			domainsbot: 0,
+			group_1: 10000,
+			group_3: 10000,
+			group_4: 10000,
+		},
+		defaultVariation: 'domainsbot',
 	},
 };

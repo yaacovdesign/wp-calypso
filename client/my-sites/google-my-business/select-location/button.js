@@ -16,13 +16,15 @@ import Gridicon from 'gridicons';
 import Button from 'components/button';
 import { connectGoogleMyBusinessLocation } from 'state/google-my-business/actions';
 import { getSelectedSiteId } from 'state/ui/selectors';
-import { recordTracksEvent } from 'state/analytics/actions';
+import { enhanceWithSiteType, recordTracksEvent } from 'state/analytics/actions';
+import { enhanceWithLocationCounts } from 'my-sites/google-my-business/utils';
+import { withEnhancers } from 'state/utils';
 
 class GoogleMyBusinessSelectLocationButton extends Component {
 	static propTypes = {
 		connectGoogleMyBusinessLocation: PropTypes.func.isRequired,
 		location: PropTypes.object.isRequired,
-		recordTracksEvent: PropTypes.func.isRequired,
+		recordTracksEventWithLocationCounts: PropTypes.func.isRequired,
 		siteId: PropTypes.number,
 		translate: PropTypes.func.isRequired,
 		onSelected: PropTypes.func,
@@ -35,7 +37,7 @@ class GoogleMyBusinessSelectLocationButton extends Component {
 	connectLocation = () => {
 		const { location, onSelected, siteId } = this.props;
 
-		this.props.recordTracksEvent(
+		this.props.recordTracksEventWithLocationCounts(
 			'calypso_google_my_business_select_location_connect_location_button_click'
 		);
 
@@ -62,7 +64,11 @@ class GoogleMyBusinessSelectLocationButton extends Component {
 			);
 		}
 
-		return <Button onClick={ this.connectLocation }>{ translate( 'Connect Location' ) }</Button>;
+		return (
+			<Button onClick={ this.connectLocation } primary>
+				{ translate( 'Connect Location' ) }
+			</Button>
+		);
 	}
 }
 
@@ -72,6 +78,9 @@ export default connect(
 	} ),
 	{
 		connectGoogleMyBusinessLocation,
-		recordTracksEvent,
+		recordTracksEventWithLocationCounts: withEnhancers( recordTracksEvent, [
+			enhanceWithLocationCounts,
+			enhanceWithSiteType,
+		] ),
 	}
 )( localize( GoogleMyBusinessSelectLocationButton ) );

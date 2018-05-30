@@ -49,7 +49,9 @@ import {
 	getSerializedPostsQuery,
 	getUnappliedMetadataEdits,
 	isAuthorEqual,
+	isDateEqual,
 	isDiscussionEqual,
+	isStatusEqual,
 	isTermsEqual,
 	mergePostEdits,
 	normalizePostForState,
@@ -430,6 +432,8 @@ export function edits( state = {}, action ) {
 						switch ( key ) {
 							case 'author':
 								return isAuthorEqual( value, post[ key ] );
+							case 'date':
+								return isDateEqual( value, post[ key ] );
 							case 'discussion':
 								return isDiscussionEqual( value, post[ key ] );
 							case 'featured_image':
@@ -437,6 +441,8 @@ export function edits( state = {}, action ) {
 							case 'metadata':
 								// omit from unappliedPostEdits, metadata edits will be merged
 								return true;
+							case 'status':
+								return isStatusEqual( value, post[ key ] );
 							case 'terms':
 								return isTermsEqual( value, post[ key ] );
 						}

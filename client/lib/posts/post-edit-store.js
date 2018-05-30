@@ -13,9 +13,9 @@ import emitter from 'lib/mixins/emitter';
  */
 import Dispatcher from 'dispatcher';
 import { decodeEntities } from 'lib/formatting';
-import * as utils from './utils';
 import { reduxDispatch } from 'lib/redux-bridge';
 import { resetSaveBlockers } from 'state/ui/editor/save-blockers/actions';
+import { editorAutosaveReset } from 'state/ui/editor/actions';
 
 /**
  * Module variables
@@ -24,12 +24,9 @@ let REGEXP_EMPTY_CONTENT = /^<p>(<br[^>]*>|&nbsp;|\s)*<\/p>$/,
 	CONTENT_LENGTH_ASSUME_SET = 50;
 
 let _initialRawContent = null,
-	_isAutosaving = false,
 	_isLoading = false,
-	_isNew = false,
 	_loadingError = null,
 	_post = null,
-	_previewUrl = null,
 	_queue = [],
 	_queueChanges = false,
 	_rawContent = null,
@@ -40,12 +37,10 @@ function resetState() {
 	debug( 'Reset state' );
 	reduxDispatch( resetSaveBlockers() );
 	_initialRawContent = null;
-	_isAutosaving = false;
 	_isLoading = false;
-	_isNew = false;
 	_loadingError = null;
 	_post = null;
-	_previewUrl = null;
+	reduxDispatch( editorAutosaveReset() );
 	_queue = [];
 	_queueChanges = false;
 	_rawContent = null;
@@ -77,7 +72,6 @@ function startEditing( site, post ) {
 	if ( post.title ) {
 		post.title = decodeEntities( post.title );
 	}
-	_previewUrl = utils.getPreviewURL( site, post );
 	_savedPost = Object.freeze( post );
 	_post = _savedPost;
 	_isLoading = false;
@@ -88,10 +82,9 @@ function updatePost( site, post ) {
 	if ( post.title ) {
 		post.title = decodeEntities( post.title );
 	}
-	_previewUrl = utils.getPreviewURL( site, post );
+	reduxDispatch( editorAutosaveReset() );
 	_savedPost = Object.freeze( post );
 	_post = _savedPost;
-	_isNew = false;
 	_loadingError = null;
 
 	// To ensure that edits made while an update is inflight are not lost, we need to apply them to the updated post.
@@ -101,10 +94,9 @@ function updatePost( site, post ) {
 }
 
 function initializeNewPost( site, options ) {
-	let args;
 	options = options || {};
 
-	args = {
+	const args = {
 		site_ID: get( site, 'ID' ),
 		status: 'draft',
 		type: options.postType || 'post',
@@ -113,7 +105,6 @@ function initializeNewPost( site, options ) {
 	};
 
 	startEditing( site, args );
-	_isNew = true;
 }
 
 function setLoadingError( error ) {
@@ -244,11 +235,7 @@ function dispatcherCallback( payload ) {
 
 		case 'RECEIVE_POST_TO_EDIT':
 			_isLoading = false;
-			if ( action.error ) {
-				setLoadingError( action.error );
-			} else {
-				startEditing( action.site, action.post );
-			}
+			startEditing( action.site, action.post );
 			PostEditStore.emit( 'change' );
 			break;
 
@@ -266,22 +253,6 @@ function dispatcherCallback( payload ) {
 			}
 			_queueChanges = false;
 			_queue = [];
-			break;
-
-		case 'POST_AUTOSAVE':
-			_isAutosaving = true;
-			PostEditStore.emit( 'change' );
-			break;
-
-		case 'RECEIVE_POST_AUTOSAVE':
-			_isAutosaving = false;
-			if ( ! action.error ) {
-				_previewUrl = utils.getPreviewURL(
-					action.site,
-					assign( { preview_URL: action.autosave.preview_URL }, _savedPost )
-				);
-			}
-			PostEditStore.emit( 'change' );
 			break;
 
 		case 'SET_POST_LOADING_ERROR':
@@ -308,9 +279,7 @@ PostEditStore = {
 	},
 
 	getChangedAttributes: function() {
-		let changedAttributes, metadata;
-
-		if ( this.isNew() ) {
+		if ( _post && ! _post.ID ) {
 			return _post;
 		}
 
@@ -319,16 +288,16 @@ PostEditStore = {
 			return Object.freeze( {} );
 		}
 
-		changedAttributes = pickBy( _post, function( value, key ) {
+		const changedAttributes = pickBy( _post, function( value, key ) {
 			return value !== _savedPost[ key ] && 'metadata' !== key;
 		} );
 
 		// exclude metadata which doesn't have any operation set (means it's unchanged)
 		if ( _post.metadata ) {
-			metadata = filter( _post.metadata, 'operation' );
+			const metadata = filter( _post.metadata, 'operation' );
 
 			if ( metadata.length ) {
-				assign( changedAttributes, { metadata: metadata } );
+				assign( changedAttributes, { metadata } );
 			}
 		}
 
@@ -350,20 +319,8 @@ PostEditStore = {
 		return _post !== _savedPost || _rawContent !== _initialRawContent;
 	},
 
-	isNew: function() {
-		return _isNew;
-	},
-
 	isLoading: function() {
 		return _isLoading;
-	},
-
-	isAutosaving: function() {
-		return _isAutosaving;
-	},
-
-	getPreviewUrl: function() {
-		return _previewUrl;
 	},
 
 	hasContent: function() {

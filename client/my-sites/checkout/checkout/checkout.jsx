@@ -32,7 +32,6 @@ import { managePurchase } from 'me/purchases/paths';
 import SubscriptionLengthPicker from 'blocks/subscription-length-picker';
 import QueryContactDetailsCache from 'components/data/query-contact-details-cache';
 import QueryStoredCards from 'components/data/query-stored-cards';
-import QueryGeo from 'components/data/query-geo';
 import QuerySitePlans from 'components/data/query-site-plans';
 import QueryPlans from 'components/data/query-plans';
 import SecurePaymentForm from './secure-payment-form';
@@ -49,13 +48,11 @@ import {
 	resetTransaction,
 	setDomainDetails,
 } from 'lib/upgrades/actions';
-import {
-	getContactDetailsCache,
-	getCurrentUserPaymentMethods,
-	getUpgradePlanSlugFromPath,
-	isDomainOnlySite,
-	isEligibleForCheckoutToChecklist,
-} from 'state/selectors';
+import getContactDetailsCache from 'state/selectors/get-contact-details-cache';
+import getCurrentUserPaymentMethods from 'state/selectors/get-current-user-payment-methods';
+import getUpgradePlanSlugFromPath from 'state/selectors/get-upgrade-plan-slug-from-path';
+import isDomainOnlySite from 'state/selectors/is-domain-only-site';
+import isEligibleForCheckoutToChecklist from 'state/selectors/is-eligible-for-checkout-to-checklist';
 import { getStoredCards } from 'state/stored-cards/selectors';
 import { isValidFeatureKey, getPlan, findPlansKeys } from 'lib/plans';
 import { GROUP_WPCOM } from 'lib/plans/constants';
@@ -610,7 +607,6 @@ export class Checkout extends React.Component {
 					<QueryProducts />
 					<QueryContactDetailsCache />
 					<QueryStoredCards />
-					<QueryGeo />
 
 					{ this.content() }
 				</div>

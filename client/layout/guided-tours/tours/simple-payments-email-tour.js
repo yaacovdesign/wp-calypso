@@ -4,7 +4,7 @@
  */
 
 import React, { Fragment } from 'react';
-import { noop } from 'lodash';
+import { includes, noop } from 'lodash';
 
 /**
  * Internal dependencies
@@ -19,6 +19,19 @@ import {
 	Quit,
 } from 'layout/guided-tours/config-elements';
 import { AddContentButton } from '../button-labels';
+import { getSectionName, hasSidebar } from 'state/ui/selectors';
+
+const sectionHasSidebar = state =>
+	hasSidebar( state ) && ! includes( [ 'customize' ], getSectionName( state ) );
+
+// When moving from stats to the editor, the menu disappears, the first step
+// loses its target, and it repositions in the top left corner.
+// This function immediately moves it outside of the viewport, and, as soon
+// as the next step's target appears, the step is repositioned correctly.
+const handleTargetDisappear = () => {
+	const tourFirstStep = document.querySelector( '.guided-tours__step-first' );
+	tourFirstStep.style.left = '-9999px';
+};
 
 export const SimplePaymentsEmailTour = makeTour(
 	<Tour name="simplePaymentsEmailTour" version="20180501" path="/" when={ noop }>
@@ -27,7 +40,9 @@ export const SimplePaymentsEmailTour = makeTour(
 			target="side-menu-page"
 			placement="beside"
 			arrow="left-top"
-			style={ { animationDelay: '2s' } }
+			style={ { animationDelay: '2s', marginTop: '-5px' } }
+			onTargetDisappear={ handleTargetDisappear }
+			when={ sectionHasSidebar }
 		>
 			{ ( { translate } ) => (
 				<Fragment>
@@ -58,7 +73,8 @@ export const SimplePaymentsEmailTour = makeTour(
 			arrow="top-left"
 			target=".editor-html-toolbar__button-insert-content-dropdown, .mce-wpcom-insert-menu button"
 			placement="below"
-			style={ { marginLeft: '-10px', zIndex: 'auto' } }
+			style={ { marginLeft: '-7px', zIndex: 'auto' } }
+			onTargetDisappear={ noop }
 		>
 			{ ( { translate } ) => (
 				<Fragment>
@@ -73,7 +89,12 @@ export const SimplePaymentsEmailTour = makeTour(
 						) }
 					</p>
 					<ButtonRow>
-						<Quit primary>{ translate( 'Got it, thanks!' ) }</Quit>
+						<Quit
+							primary
+							target=".editor-html-toolbar__button-insert-content-dropdown, .mce-wpcom-insert-menu button"
+						>
+							{ translate( 'Got it, thanks!' ) }
+						</Quit>
 					</ButtonRow>
 					<Link href="https://en.support.wordpress.com/simple-payments">
 						{ translate( 'Learn more about Simple Payments.' ) }

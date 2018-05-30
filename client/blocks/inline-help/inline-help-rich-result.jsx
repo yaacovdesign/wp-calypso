@@ -22,8 +22,6 @@ import {
 	RESULT_VIDEO,
 } from './constants';
 import Button from 'components/button';
-import Dialog from 'components/dialog';
-import ResizableIframe from 'components/resizable-iframe';
 import { decodeEntities, preventWidows } from 'lib/formatting';
 import { recordTracksEvent } from 'state/analytics/actions';
 import { getSearchQuery } from 'state/inline-help/selectors';
@@ -32,6 +30,7 @@ import { requestGuidedTour } from 'state/ui/guided-tours/actions';
 class InlineHelpRichResult extends Component {
 	static propTypes = {
 		result: PropTypes.object,
+		setDialogState: PropTypes.func.isRequired,
 	};
 
 	state = {
@@ -41,8 +40,9 @@ class InlineHelpRichResult extends Component {
 	handleClick = event => {
 		event.preventDefault();
 		const { href } = event.target;
-		const { type } = this.props;
-		const tour = get( this.props.result, RESULT_TOUR );
+		const { type, result } = this.props;
+		const tour = get( result, RESULT_TOUR );
+		const postId = get( result, 'post_id' );
 		const tracksData = omitBy(
 			{
 				search_query: this.props.searchQuery,
@@ -60,8 +60,20 @@ class InlineHelpRichResult extends Component {
 			if ( event.metaKey ) {
 				window.open( href, '_blank' );
 			} else {
-				this.setState( { showDialog: ! this.state.showDialog } );
+				this.props.setDialogState( {
+					showDialog: true,
+					dialogType: 'video',
+					videoLink: get( result, RESULT_LINK ),
+				} );
 			}
+		} else if ( type === RESULT_ARTICLE && postId ) {
+			event.preventDefault();
+			this.props.setDialogState( {
+				showDialog: true,
+				dialogType: 'article',
+				dialogPostHref: href,
+				dialogPostId: postId,
+			} );
 		} else {
 			if ( ! href ) {
 				return;
@@ -76,32 +88,6 @@ class InlineHelpRichResult extends Component {
 
 	onCancel = () => {
 		this.setState( { showDialog: ! this.state.showDialog } );
-	};
-
-	renderDialog = () => {
-		const { showDialog } = this.state;
-		const link = get( this.props.result, RESULT_LINK );
-		const iframeClasses = classNames( 'inline-help__richresult__dialog__video' );
-		return (
-			<Dialog
-				additionalClassNames="inline-help__richresult__dialog"
-				isVisible={ showDialog }
-				onCancel={ this.onCancel }
-				onClose={ this.onCancel }
-			>
-				<div className={ iframeClasses }>
-					<ResizableIframe
-						src={ link + '?rel=0&amp;showinfo=0&amp;autoplay=1' }
-						frameBorder="0"
-						seamless
-						allowFullScreen
-						autoPlay
-						width="640"
-						height="360"
-					/>
-				</div>
-			</Dialog>
-		);
 	};
 
 	render() {
@@ -124,7 +110,6 @@ class InlineHelpRichResult extends Component {
 						}[ type ]
 					}
 				</Button>
-				{ type === RESULT_VIDEO && this.renderDialog() }
 			</div>
 		);
 	}

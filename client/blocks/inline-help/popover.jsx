@@ -4,7 +4,7 @@
  */
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { noop } from 'lodash';
+import { noop, isEmpty } from 'lodash';
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
 import classNames from 'classnames';
@@ -21,13 +21,15 @@ import Popover from 'components/popover';
 import InlineHelpSearchResults from './inline-help-search-results';
 import InlineHelpSearchCard from './inline-help-search-card';
 import InlineHelpRichResult from './inline-help-rich-result';
-import HelpContact from 'me/help/help-contact';
 import { getSearchQuery, getInlineHelpCurrentlySelectedResult } from 'state/inline-help/selectors';
 import { getHelpSelectedSite } from 'state/help/selectors';
+import QuerySupportTypes from 'blocks/inline-help/inline-help-query-support-types';
+import InlineHelpContactView from 'blocks/inline-help/inline-help-contact-view';
 
 class InlineHelpPopover extends Component {
 	static propTypes = {
 		onClose: PropTypes.func.isRequired,
+		setDialogState: PropTypes.func.isRequired,
 	};
 
 	static defaultProps = {
@@ -40,8 +42,12 @@ class InlineHelpPopover extends Component {
 	};
 
 	openResultView = event => {
+		const { selectedResult } = this.props;
 		event.preventDefault();
-		this.openSecondaryView( VIEW_RICH_RESULT );
+
+		if ( ! isEmpty( selectedResult ) ) {
+			this.openSecondaryView( VIEW_RICH_RESULT );
+		}
 	};
 
 	moreHelpClicked = () => {
@@ -80,8 +86,13 @@ class InlineHelpPopover extends Component {
 			<div className={ classes }>
 				{
 					{
-						contact: <HelpContact compact selectedSite={ this.props.selectedSite } />,
-						richresult: <InlineHelpRichResult result={ this.props.selectedResult } />,
+						contact: <InlineHelpContactView />,
+						richresult: (
+							<InlineHelpRichResult
+								result={ this.props.selectedResult }
+								setDialogState={ this.props.setDialogState }
+							/>
+						),
 					}[ this.state.activeSecondaryView ]
 				}
 			</div>
@@ -101,6 +112,7 @@ class InlineHelpPopover extends Component {
 				context={ this.props.context }
 				className={ classNames( 'inline-help__popover', popoverClasses ) }
 			>
+				<QuerySupportTypes />
 				<div className="inline-help__search">
 					<InlineHelpSearchCard
 						openResult={ this.openResultView }

@@ -16,6 +16,7 @@ import {
 	getDeserializedPostsQueryDetails,
 	getSerializedPostsQueryWithoutPage,
 	isAuthorEqual,
+	isDateEqual,
 	isDiscussionEqual,
 	areAllMetadataEditsApplied,
 	applyPostEdits,
@@ -364,27 +365,27 @@ export function getEditedPostValue( state, siteId, postId, field ) {
 }
 
 /**
- * Returns true if the edited post visibility is private.
+ * Returns true if the edited post is password protected.
  *
  * @param  {Object}  state  Global state tree
  * @param  {Number}  siteId Site ID
  * @param  {Number}  postId Post ID
- * @return {Boolean}        Whether edited post visibility is private
+ * @return {Boolean}        Result of the check
  */
-export function isEditedPostPrivate( state, siteId, postId ) {
+export function isEditedPostPasswordProtected( state, siteId, postId ) {
 	const password = getEditedPostValue( state, siteId, postId, 'password' );
 	return !! ( password && password.length > 0 );
 }
 
 /**
- * Returns true if a valid password is set for the edited post with private visibility.
+ * Returns true if the edited post is password protected and has a valid password set
  *
  * @param  {Object}  state  Global state tree
  * @param  {Number}  siteId Site ID
  * @param  {Number}  postId Post ID
- * @return {Boolean}        Whether password for the edited post with private visibility is valid
+ * @return {Boolean}        Result of the check
  */
-export function isPrivateEditedPostPasswordValid( state, siteId, postId ) {
+export function isEditedPostPasswordProtectedWithValidPassword( state, siteId, postId ) {
 	const password = getEditedPostValue( state, siteId, postId, 'password' );
 	return !! ( password && password.trim().length > 0 );
 }
@@ -414,7 +415,7 @@ export const isEditedPostDirty = createSelector(
 						return ! isAuthorEqual( value, post.author );
 					}
 					case 'date': {
-						return ! moment( value ).isSame( post.date );
+						return ! isDateEqual( value, post.date );
 					}
 					case 'discussion': {
 						return ! isDiscussionEqual( value, post.discussion );

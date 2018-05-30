@@ -20,6 +20,7 @@ import DocumentHead from 'components/data/document-head';
 import fetchComponentsUsageStats from 'state/components-usage-stats/actions';
 import HeaderCake from 'components/header-cake';
 import Main from 'components/main';
+import ReadmeViewer from 'components/readme-viewer';
 import SearchCard from 'components/search-card';
 
 /**
@@ -27,6 +28,7 @@ import SearchCard from 'components/search-card';
  */
 import Accordions from 'components/accordion/docs/example';
 import ActionCard from 'components/action-card/docs/example';
+import ActionPanel from 'components/action-panel/docs/example';
 import Animate from 'components/animate/docs/example';
 import BackButton from 'components/back-button/docs/example';
 import Badge from 'components/badge/docs/example';
@@ -66,8 +68,10 @@ import ImagePreloader from 'components/image-preloader/docs/example';
 import InfoPopover from 'components/info-popover/docs/example';
 import InputChrono from 'components/input-chrono/docs/example';
 import JetpackColophonExample from 'components/jetpack-colophon/docs/example';
+import JetpackHeaderExample from 'components/jetpack-header/docs/example';
 import JetpackLogoExample from 'components/jetpack-logo/docs/example';
 import LanguagePicker from 'components/language-picker/docs/example';
+import LineChart from 'components/line-chart/docs/example';
 import ListEnd from 'components/list-end/docs/example';
 import MarkedLinesExample from 'components/marked-lines/docs/example';
 import Notices from 'components/notice/docs/example';
@@ -95,6 +99,7 @@ import SpinnerButton from 'components/spinner-button/docs/example';
 import SpinnerLine from 'components/spinner-line/docs/example';
 import SplitButton from 'components/split-button/docs/example';
 import Suggestions from 'components/suggestions/docs/example';
+import SupportInfoExample from 'components/support-info/docs/example';
 import TextareaAutosize from 'components/textarea-autosize/docs/example';
 import TextDiff from 'components/text-diff/docs/example';
 import TileGrid from 'components/tile-grid/docs/example';
@@ -106,6 +111,7 @@ import Version from 'components/version/docs/example';
 import VerticalMenu from 'components/vertical-menu/docs/example';
 import VerticalNav from 'components/vertical-nav/docs/example';
 import Wizard from 'components/wizard/docs/example';
+import WizardProgressBar from 'components/wizard-progress-bar/docs/example';
 
 class DesignAssets extends React.Component {
 	static displayName = 'DesignAssets';
@@ -144,17 +150,21 @@ class DesignAssets extends React.Component {
 						{ slugToCamelCase( component ) }
 					</HeaderCake>
 				) : (
-					<SearchCard
-						onSearch={ this.onSearch }
-						initialValue={ filter }
-						placeholder="Search components…"
-						analyticsGroup="Docs"
-						className="design__ui-components-search"
-					/>
+					<div>
+						<ReadmeViewer readmeFilePath="/client/devdocs/design/README.md" />
+						<SearchCard
+							onSearch={ this.onSearch }
+							initialValue={ filter }
+							placeholder="Search components…"
+							analyticsGroup="Docs"
+							className="design__ui-components-search"
+						/>
+					</div>
 				) }
 
 				<Collection component={ component } filter={ filter }>
 					<ActionCard readmeFilePath="action-card" />
+					<ActionPanel readmeFilePath="action-panel" />
 					<Accordions
 						componentUsageStats={ componentsUsageStats.accordion }
 						readmeFilePath="accordion"
@@ -199,8 +209,10 @@ class DesignAssets extends React.Component {
 					<InfoPopover readmeFilePath="info-popover" />
 					<InputChrono readmeFilePath="input-chrono" />
 					<JetpackColophonExample readmeFilePath="jetpack-colophon" />
+					<JetpackHeaderExample readmeFilePath="jetpack-header" />
 					<JetpackLogoExample readmeFilePath="jetpack-logo" />
 					<LanguagePicker readmeFilePath="language-picker" />
+					<LineChart />
 					<ListEnd readmeFilePath="list-end" />
 					<MarkedLinesExample readmeFilePath="marked-lines" />
 					<Notices readmeFilePath="notice" />
@@ -227,6 +239,7 @@ class DesignAssets extends React.Component {
 					<SpinnerButton searchKeywords="loading input submit" readmeFilePath="spinner-button" />
 					<SpinnerLine searchKeywords="loading" readmeFilePath="spinner-line" />
 					<Suggestions readmeFilePath="suggestions" />
+					<SupportInfoExample />
 					<TextareaAutosize readmeFilePath="textarea-autosize" />
 					<TextDiff readmeFilePath="text-diff" />
 					<TileGrid readmeFilePath="tile-grid" />
@@ -238,6 +251,7 @@ class DesignAssets extends React.Component {
 					<VerticalNav readmeFilePath="vertical-nav" />
 					<Version readmeFilePath="version" />
 					<Wizard readmeFilePath="wizard" />
+					<WizardProgressBar readmeFilePath="wizard-progress-bar" />
 				</Collection>
 			</Main>
 		);

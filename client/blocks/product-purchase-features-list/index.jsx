@@ -40,7 +40,8 @@ import JetpackSearch from './jetpack-search';
 import JetpackReturnToDashboard from './jetpack-return-to-dashboard';
 import JetpackWordPressCom from './jetpack-wordpress-com';
 import MobileApps from './mobile-apps';
-import { isSiteAutomatedTransfer } from 'state/selectors';
+import SellOnlinePaypal from './sell-online-paypal';
+import isSiteAutomatedTransfer from 'state/selectors/is-site-automated-transfer';
 import { isEnabled } from 'config';
 import { isWordadsInstantActivationEligible } from 'lib/ads/utils';
 import { hasDomainCredit } from 'state/sites/plans/selectors';
@@ -77,12 +78,13 @@ export class ProductPurchaseFeaturesList extends Component {
 				<JetpackSearch selectedSite={ selectedSite } />
 				<GoogleVouchers selectedSite={ selectedSite } />
 				<GoogleAnalyticsStats selectedSite={ selectedSite } />
-				<AdvertisingRemoved isBusinessPlan />
+				<AdvertisingRemoved isBusinessPlan selectedSite={ selectedSite } />
 				<CustomizeTheme selectedSite={ selectedSite } />
 				<VideoAudioPosts selectedSite={ selectedSite } plan={ plan } />
 				<FindNewTheme selectedSite={ selectedSite } />
 				{ isEnabled( 'manage/plugins/upload' ) && <UploadPlugins selectedSite={ selectedSite } /> }
 				<MobileApps />
+				<SellOnlinePaypal isJetpack={ false } />
 			</Fragment>
 		);
 	}
@@ -94,7 +96,7 @@ export class ProductPurchaseFeaturesList extends Component {
 			<Fragment>
 				<HappinessSupportCard isPlaceholder={ isPlaceholder } />
 				<CustomDomain selectedSite={ selectedSite } hasDomainCredit={ planHasDomainCredit } />
-				<AdvertisingRemoved isBusinessPlan={ false } />
+				<AdvertisingRemoved isBusinessPlan={ false } selectedSite={ selectedSite } />
 				<GoogleVouchers selectedSite={ selectedSite } />
 				<CustomizeTheme selectedSite={ selectedSite } />
 				<VideoAudioPosts selectedSite={ selectedSite } plan={ plan } />
@@ -102,6 +104,7 @@ export class ProductPurchaseFeaturesList extends Component {
 					<MonetizeSite selectedSite={ selectedSite } />
 				) }
 				<MobileApps />
+				<SellOnlinePaypal isJetpack={ false } />
 			</Fragment>
 		);
 	}
@@ -113,14 +116,19 @@ export class ProductPurchaseFeaturesList extends Component {
 			<Fragment>
 				<HappinessSupportCard isPlaceholder={ isPlaceholder } />
 				<CustomDomain selectedSite={ selectedSite } hasDomainCredit={ planHasDomainCredit } />
-				<AdvertisingRemoved isBusinessPlan={ false } />
+				<AdvertisingRemoved isBusinessPlan selectedSite={ selectedSite } />
 				<MobileApps />
 			</Fragment>
 		);
 	}
 
 	getJetpackFreeFeatures() {
-		const { isAutomatedTransfer, isPlaceholder, selectedSite } = this.props;
+		const {
+			isAutomatedTransfer,
+			isPlaceholder,
+			recordReturnToDashboardClick,
+			selectedSite,
+		} = this.props;
 		return (
 			<Fragment>
 				<HappinessSupportCard
@@ -129,17 +137,22 @@ export class ProductPurchaseFeaturesList extends Component {
 					isPlaceholder={ isPlaceholder }
 				/>
 				<JetpackWordPressCom selectedSite={ selectedSite } />
+				<MobileApps />
 				<JetpackReturnToDashboard
-					onClick={ this.props.recordReturnToDashboardClick }
+					onClick={ recordReturnToDashboardClick }
 					selectedSite={ selectedSite }
 				/>
-				<MobileApps />
 			</Fragment>
 		);
 	}
 
 	getJetpackPremiumFeatures() {
-		const { isAutomatedTransfer, isPlaceholder, selectedSite } = this.props;
+		const {
+			isAutomatedTransfer,
+			isPlaceholder,
+			recordReturnToDashboardClick,
+			selectedSite,
+		} = this.props;
 		return (
 			<Fragment>
 				<HappinessSupportCard
@@ -149,17 +162,26 @@ export class ProductPurchaseFeaturesList extends Component {
 				<MonetizeSite selectedSite={ selectedSite } />
 				<JetpackWordPressCom selectedSite={ selectedSite } />
 				<JetpackBackupSecurity />
-				<JetpackAntiSpam />
-				<JetpackPublicize />
-				<JetpackVideo />
-				<JetpackReturnToDashboard selectedSite={ selectedSite } />
+				<JetpackAntiSpam selectedSite={ selectedSite } />
+				<JetpackPublicize selectedSite={ selectedSite } />
+				<JetpackVideo selectedSite={ selectedSite } />
 				<MobileApps />
+				<SellOnlinePaypal isJetpack />
+				<JetpackReturnToDashboard
+					onClick={ recordReturnToDashboardClick }
+					selectedSite={ selectedSite }
+				/>
 			</Fragment>
 		);
 	}
 
 	getJetpackPersonalFeatures() {
-		const { isAutomatedTransfer, isPlaceholder, selectedSite } = this.props;
+		const {
+			isAutomatedTransfer,
+			isPlaceholder,
+			recordReturnToDashboardClick,
+			selectedSite,
+		} = this.props;
 
 		return (
 			<Fragment>
@@ -169,15 +191,23 @@ export class ProductPurchaseFeaturesList extends Component {
 				/>
 				<JetpackWordPressCom selectedSite={ selectedSite } />
 				<JetpackBackupSecurity />
-				<JetpackAntiSpam />
-				<JetpackReturnToDashboard selectedSite={ selectedSite } />
+				<JetpackAntiSpam selectedSite={ selectedSite } />
 				<MobileApps />
+				<JetpackReturnToDashboard
+					onClick={ recordReturnToDashboardClick }
+					selectedSite={ selectedSite }
+				/>
 			</Fragment>
 		);
 	}
 
 	getJetpackBusinessFeatures() {
-		const { isAutomatedTransfer, isPlaceholder, selectedSite } = this.props;
+		const {
+			isAutomatedTransfer,
+			isPlaceholder,
+			selectedSite,
+			recordReturnToDashboardClick,
+		} = this.props;
 		return (
 			<Fragment>
 				<HappinessSupportCard
@@ -195,12 +225,16 @@ export class ProductPurchaseFeaturesList extends Component {
 				<GoogleAnalyticsStats selectedSite={ selectedSite } />
 				<JetpackWordPressCom selectedSite={ selectedSite } />
 				<FindNewTheme selectedSite={ selectedSite } />
-				<JetpackVideo />
-				<JetpackPublicize />
+				<JetpackVideo selectedSite={ selectedSite } />
+				<JetpackPublicize selectedSite={ selectedSite } />
 				<JetpackBackupSecurity />
-				<JetpackAntiSpam />
-				<JetpackReturnToDashboard selectedSite={ selectedSite } />
+				<JetpackAntiSpam selectedSite={ selectedSite } />
 				<MobileApps />
+				<SellOnlinePaypal isJetpack />
+				<JetpackReturnToDashboard
+					onClick={ recordReturnToDashboardClick }
+					selectedSite={ selectedSite }
+				/>
 			</Fragment>
 		);
 	}

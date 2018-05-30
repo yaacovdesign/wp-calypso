@@ -390,6 +390,68 @@ Undocumented.prototype.settings = function( siteId, method = 'get', data = {}, f
 	return this.wpcom.req.post( { path }, { apiVersion }, body, fn );
 };
 
+/**
+ * Get site keyrings
+ *
+ * @param {int|string} [siteId] The site ID
+ * @param {Function} fn The callback function
+ * @api public
+ *
+ * @returns {Promise} A promise that resolves when the request completes
+ */
+Undocumented.prototype.getSiteKeyrings = function getSiteKeyrings( siteId, fn ) {
+	return this.wpcom.req.get( '/sites/' + siteId + '/keyrings', { apiVersion: '1.1' }, fn );
+};
+
+/**
+ * Update or create a site keyring
+ *
+ * @param {int|string} [siteId] The site ID
+ * @param {Object} [data] site keyring object with properties:
+ * 	- keyring_id {int} the keyring id to update or create,
+ * 	- external_user_id {string} Optional. The external user id to link the site to
+ * 	- service {string} service name for this keyring id
+ * @param {Function} fn The callback function
+ * @api public
+ *
+ * @returns {Promise} A promise that resolves when the request completes
+ */
+Undocumented.prototype.updateSiteKeyrings = function updateSiteKeyring( siteId, data, fn ) {
+	return this.wpcom.req.post( '/sites/' + siteId + '/keyrings', { apiVersion: '1.1' }, data, fn );
+};
+
+/**
+ * Delete a site keyring
+ *
+ * @param {int|string} [siteId] The site ID
+ * @param {int} keyringId The keyring id
+ * @param {string|null} externalUserId Optional, the external user id
+ * @param {Function} fn The callback function
+ * @api public
+ *
+ * @returns {Promise} A promise that resolves when the request completes
+ */
+Undocumented.prototype.deleteSiteKeyring = function deleteSiteKeyring(
+	siteId,
+	keyringId,
+	externalUserId,
+	fn
+) {
+	if ( ! fn && typeof externalUserId === 'function' ) {
+		fn = externalUserId;
+		externalUserId = null;
+	}
+
+	return this.wpcom.req.post(
+		'/sites/' + siteId + '/keyrings/' + keyringId + '/delete',
+		{ apiVersion: '1.1' },
+		{
+			external_user_id: externalUserId,
+		},
+		fn
+	);
+};
+
 Undocumented.prototype._sendRequest = function( originalParams, fn ) {
 	const { apiVersion, method } = originalParams,
 		updatedParams = omit( originalParams, [ 'apiVersion', 'method' ] );
@@ -418,6 +480,23 @@ Undocumented.prototype.isDomainAvailable = function( domain, blogId, fn ) {
 			blog_id: blogId,
 			apiVersion: '1.3',
 		},
+		fn
+	);
+};
+
+/**
+ * Get the inbound transfer status for this domain
+ *
+ * @param {string} domain - The domain name to check.
+ * @param {string} authCode - The auth code for the given domain to check.
+ * @param {Function} fn The callback function
+ * @returns {Promise} A promise that resolves when the request completes
+ * @api public
+ */
+Undocumented.prototype.checkAuthCode = function( domain, authCode, fn ) {
+	return this.wpcom.req.get(
+		`/domains/${ encodeURIComponent( domain ) }/inbound-transfer-check-auth-code`,
+		{ auth_code: authCode },
 		fn
 	);
 };
@@ -462,15 +541,20 @@ Undocumented.prototype.restartInboundTransfer = function( siteId, domain, fn ) {
  *
  * @param {int|string} siteId The site ID
  * @param {string} domain The domain name
+ * @param {string} authCode The auth code for the transfer
  * @param {Function} fn The callback function
  * @returns {Promise} A promise that resolves when the request completes
  * @api public
  */
-Undocumented.prototype.startInboundTransfer = function( siteId, domain, fn ) {
+Undocumented.prototype.startInboundTransfer = function( siteId, domain, authCode, fn ) {
+	let query = {};
+	if ( authCode && authCode !== '' ) {
+		query = { auth_code: authCode };
+	}
+
 	return this.wpcom.req.get(
-		{
-			path: `/domains/${ encodeURIComponent( domain ) }/inbound-transfer-start/${ siteId }`,
-		},
+		`/domains/${ encodeURIComponent( domain ) }/inbound-transfer-start/${ siteId }`,
+		query,
 		fn
 	);
 };
@@ -494,12 +578,12 @@ Undocumented.prototype.resendInboundTransferEmail = function( domain, fn ) {
 /**
  * Fetches a list of available top-level domain names ordered by popularity.
  *
- * @param {Function} fn The callback function
+ * @param {object} query Optional query parameters
  * @returns {Promise} A promise that resolves when the request completes
  * @api public
  */
-Undocumented.prototype.getAvailableTlds = function( fn ) {
-	return this.wpcom.req.get( '/domains/suggestions/tlds', fn );
+Undocumented.prototype.getAvailableTlds = function( query = {} ) {
+	return this.wpcom.req.get( '/domains/suggestions/tlds', query );
 };
 
 /**
@@ -1112,6 +1196,26 @@ Undocumented.prototype.ebanxConfiguration = function( query, fn ) {
 	debug( '/me/ebanx-configuration query' );
 
 	return this.wpcom.req.get( '/me/ebanx-configuration', query, fn );
+};
+
+/**
+ * GET emergent paywall iframe client configuration
+ *
+ * @param {string} countryCode - user's country code
+ * @param {object} cart - current cart object. See: client/lib/cart/store/index.js
+ * @param {Function} fn The callback function
+ * @api public
+ *
+ * @returns {Promise} promise
+ */
+Undocumented.prototype.emergentPaywallConfiguration = function( countryCode, cart, fn ) {
+	debug( '/me/emergent-paywall-configuration query' );
+
+	return this.wpcom.req.post(
+		'/me/emergent-paywall-configuration',
+		{ country: countryCode, cart },
+		fn
+	);
 };
 
 /**
@@ -2013,7 +2117,7 @@ Undocumented.prototype.uploadExportFile = function( siteId, params ) {
  */
 Undocumented.prototype.getHelpLinks = function( searchQuery, fn ) {
 	debug( 'help-search/ searchQuery' );
-	return this.wpcom.req.get( '/help/search', { query: searchQuery }, fn );
+	return this.wpcom.req.get( '/help/search', { query: searchQuery, include_post_id: 1 }, fn );
 };
 
 Undocumented.prototype.getQandA = function( query, site, fn ) {
@@ -2493,6 +2597,20 @@ Undocumented.prototype.updateSiteAddress = function( siteId, blogname, discard, 
 		{},
 		{ blogname, discard, nonce }
 	);
+};
+
+Undocumented.prototype.requestGdprConsentManagementLink = function( domain, callback ) {
+	return this.wpcom.req.get( `/domains/${ domain }/request-gdpr-consent-management-link`, function(
+		error,
+		response
+	) {
+		if ( error ) {
+			callback( error );
+			return;
+		}
+
+		callback( null, response );
+	} );
 };
 
 export default Undocumented;

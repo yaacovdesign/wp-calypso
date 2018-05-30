@@ -11,15 +11,19 @@ import { find } from 'lodash';
 /**
  * Internal dependencies
  */
+import config from 'config';
 import EmptyContent from 'components/empty-content';
 import FormattedHeader from 'components/formatted-header';
 import Checklist from 'blocks/checklist';
 import Main from 'components/main';
 import DocumentHead from 'components/data/document-head';
+import { jetpackTasks } from '../jetpack-checklist';
 import { requestSiteChecklistTaskUpdate } from 'state/checklist/actions';
 import { getSelectedSiteId } from 'state/ui/selectors';
-import { isSiteAutomatedTransfer, getSiteChecklist } from 'state/selectors';
+import getSiteChecklist from 'state/selectors/get-site-checklist';
+import isSiteAutomatedTransfer from 'state/selectors/is-site-automated-transfer';
 import { isJetpackSite, getSiteSlug } from 'state/sites/selectors';
+import { getCurrentUser } from 'state/current-user/selectors';
 import QuerySiteChecklist from 'components/data/query-site-checklist';
 import { launchTask, onboardingTasks } from '../onboardingChecklist';
 import { recordTracksEvent } from 'state/analytics/actions';
@@ -27,10 +31,7 @@ import { createNotice } from 'state/notices/actions';
 import { requestGuidedTour } from 'state/ui/guided-tours/actions';
 import ChecklistShowShare from './share';
 import SidebarNavigation from 'my-sites/sidebar-navigation';
-import userFactory from 'lib/user';
 import PageViewTracker from 'lib/analytics/page-view-tracker';
-
-const user = userFactory();
 
 class ChecklistShow extends PureComponent {
 	onAction = id => {
@@ -72,7 +73,7 @@ class ChecklistShow extends PureComponent {
 					'We’ve prepared a list of things that will help you get there quickly.',
 				{
 					args: {
-						email: user.get().email,
+						email: this.props.user.email,
 					},
 				}
 			);
@@ -179,14 +180,15 @@ const mapStateToProps = state => {
 	const siteId = getSelectedSiteId( state );
 	const siteSlug = getSiteSlug( state, siteId );
 	const siteChecklist = getSiteChecklist( state, siteId );
-	const tasks = onboardingTasks( siteChecklist );
 	const isAtomic = isSiteAutomatedTransfer( state, siteId );
 	const isJetpack = isJetpackSite( state, siteId );
+	const tasks = isJetpack ? jetpackTasks( siteChecklist ) : onboardingTasks( siteChecklist );
 	return {
-		checklistAvailable: ! isAtomic && ! isJetpack,
+		checklistAvailable: ! isAtomic && ( config.isEnabled( 'jetpack/checklist' ) || ! isJetpack ),
 		siteId,
 		siteSlug,
 		tasks,
+		user: getCurrentUser( state ),
 	};
 };
 

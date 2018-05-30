@@ -44,11 +44,12 @@ import SitesDropdown from 'components/sites-dropdown';
 import ColorSchemePicker from 'blocks/color-scheme-picker';
 import { successNotice, errorNotice } from 'state/notices/actions';
 import { getLanguage, isLocaleVariant, canBeTranslated } from 'lib/i18n-utils';
-import { isRequestingMissingSites } from 'state/selectors';
+import isRequestingMissingSites from 'state/selectors/is-requesting-missing-sites';
 import PageViewTracker from 'lib/analytics/page-view-tracker';
 import _user from 'lib/user';
 import { canDisplayCommunityTranslator } from 'components/community-translator/utils';
 import { ENABLE_TRANSLATOR_KEY } from 'components/community-translator/constants';
+import AccountSettingsCloseLink from './close-link';
 
 const user = _user();
 const colorSchemeKey = 'calypso_preferences.colorScheme';
@@ -787,6 +788,8 @@ const Account = createReactClass( {
 						</ReactCSSTransitionGroup>
 					</form>
 				</Card>
+
+				{ config.isEnabled( 'me/account-close' ) && <AccountSettingsCloseLink /> }
 			</Main>
 		);
 	},
