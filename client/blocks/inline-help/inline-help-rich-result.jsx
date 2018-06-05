@@ -33,10 +33,6 @@ class InlineHelpRichResult extends Component {
 		setDialogState: PropTypes.func.isRequired,
 	};
 
-	state = {
-		showDialog: false,
-	};
-
 	handleClick = event => {
 		event.preventDefault();
 		const { href } = event.target;
@@ -84,10 +80,6 @@ class InlineHelpRichResult extends Component {
 				window.location = href;
 			}
 		}
-	};
-
-	onCancel = () => {
-		this.setState( { showDialog: ! this.state.showDialog } );
 	};
 
 	render() {
