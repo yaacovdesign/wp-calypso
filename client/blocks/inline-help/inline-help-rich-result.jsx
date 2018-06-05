@@ -31,6 +31,7 @@ class InlineHelpRichResult extends Component {
 	static propTypes = {
 		result: PropTypes.object,
 		setDialogState: PropTypes.func.isRequired,
+		closePopover: PropTypes.func.isRequired,
 	};
 
 	handleClick = event => {
@@ -49,6 +50,7 @@ class InlineHelpRichResult extends Component {
 		);
 
 		this.props.recordTracksEvent( `calypso_inlinehelp_${ type }_open`, tracksData );
+		this.props.closePopover();
 
 		if ( type === RESULT_TOUR ) {
 			this.props.requestGuidedTour( tour );
