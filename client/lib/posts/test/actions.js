@@ -27,7 +27,7 @@ describe( 'actions', () => {
 	let sandbox;
 
 	beforeAll( () => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 	} );
 
 	beforeEach( () => {
