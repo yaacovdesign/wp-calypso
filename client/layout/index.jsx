@@ -27,6 +27,7 @@ import config from 'config';
 import PulsingDot from 'components/pulsing-dot';
 import OfflineStatus from 'layout/offline-status';
 import QueryPreferences from 'components/data/query-preferences';
+import FloatingActions from 'layout/floating-actions';
 
 /**
  * Internal dependencies
@@ -143,18 +144,13 @@ const Layout = createReactClass( {
 						{ this.props.primary }
 					</div>
 				</div>
-				{ config.isEnabled( 'i18n/community-translator' ) ? (
-					isCommunityTranslatorEnabled() && <AsyncLoad require="components/community-translator" />
-				) : (
-					<TranslatorLauncher />
-				) }
 				{ this.renderPreview() }
 				{ config.isEnabled( 'happychat' ) &&
 					this.props.chatIsOpen && <AsyncLoad require="components/happychat" /> }
 				{ 'development' === process.env.NODE_ENV && (
 					<AsyncLoad require="components/webpack-build-monitor" placeholder={ null } />
 				) }
-				<InlineHelp />
+				{ <FloatingActions /> }
 				<AppBanner />
 				{ config.isEnabled( 'gdpr-banner' ) && <GdprBanner /> }
 			</div>
