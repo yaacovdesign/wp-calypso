@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
 import classNames from 'classnames';
 import { get, isUndefined, omitBy } from 'lodash';
+import Gridicon from 'gridicons';
 
 /**
  * Internal Dependencies
@@ -31,6 +32,18 @@ class InlineHelpRichResult extends Component {
 	static propTypes = {
 		result: PropTypes.object,
 		setDialogState: PropTypes.func.isRequired,
+	};
+
+	buttonLabels = {
+		article: this.props.translate( 'Read more' ),
+		video: this.props.translate( 'Watch a video' ),
+		tour: this.props.translate( 'Start Tour' ),
+	};
+
+	buttonIcons = {
+		tour: 'list-ordered',
+		video: 'video',
+		article: 'reader',
 	};
 
 	state = {
@@ -91,24 +104,21 @@ class InlineHelpRichResult extends Component {
 	};
 
 	render() {
-		const { type } = this.props;
-		const { translate, result } = this.props;
+		const { result, type } = this.props;
 		const title = get( result, RESULT_TITLE );
 		const description = get( result, RESULT_DESCRIPTION );
 		const link = get( result, RESULT_LINK );
+		const buttonLabel = get( this.buttonLabels, type, '' );
+		const buttonIcon = get( this.buttonIcons, type );
 		const classes = classNames( 'inline-help__richresult__title' );
+
 		return (
 			<div>
 				<h2 className={ classes }>{ preventWidows( decodeEntities( title ) ) }</h2>
 				<p>{ preventWidows( decodeEntities( description ) ) }</p>
 				<Button primary onClick={ this.handleClick } href={ link }>
-					{
-						{
-							article: translate( 'Read more' ),
-							video: translate( 'Watch a video' ),
-							tour: translate( 'Start Tour' ),
-						}[ type ]
-					}
+					{ buttonIcon && <Gridicon icon={ buttonIcon } size={ 12 } /> }
+					{ buttonLabel }
 				</Button>
 			</div>
 		);
