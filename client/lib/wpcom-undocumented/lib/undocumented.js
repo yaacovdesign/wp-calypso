@@ -57,37 +57,6 @@ Undocumented.prototype.mailingList = function( category ) {
 };
 
 /*
- * Retrieve Jetpack Jumpstart status for a site with id siteid.
- *
- * @param {int}      [siteId]
- * @param {Function} fn
- * @api public
- */
-Undocumented.prototype.getJetpackJumpstart = function( siteId, fn ) {
-	return this.wpcom.req.get(
-		{ path: '/jetpack-blogs/' + siteId + '/rest-api/' },
-		{ path: '/jetpack/v4/jumpstart/' },
-		fn
-	);
-};
-
-/*
- * Activate or deactivate Jetpack Jumpstart for a site with id siteid.
- *
- * @param {int}      [siteId]
- * @param {Boolean}  [active]
- * @param {Function} fn
- * @api public
- */
-Undocumented.prototype.updateJetpackJumpstart = function( siteId, active, fn ) {
-	return this.wpcom.req.post(
-		{ path: '/jetpack-blogs/' + siteId + '/rest-api/' },
-		{ path: '/jetpack/v4/jumpstart/', body: JSON.stringify( { active } ) },
-		fn
-	);
-};
-
-/*
  * Retrieve Jetpack modules data for a site with id siteid.
  * Uses the REST API of the Jetpack site.
  *
@@ -2611,6 +2580,20 @@ Undocumented.prototype.requestGdprConsentManagementLink = function( domain, call
 
 		callback( null, response );
 	} );
+};
+
+Undocumented.prototype.getDomainConnectSyncUxUrl = function(
+	domain,
+	providerId,
+	serviceId,
+	redirectUri,
+	callback
+) {
+	return this.wpcom.req.get(
+		`/domains/${ domain }/dns/providers/${ providerId }/services/${ serviceId }/syncurl`,
+		{ redirect_uri: redirectUri },
+		callback
+	);
 };
 
 export default Undocumented;

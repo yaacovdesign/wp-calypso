@@ -1,7 +1,7 @@
 /** @format */
 export default {
 	multiyearSubscriptions: {
-		datestamp: '20180417',
+		datestamp: '20180601',
 		variations: {
 			show: 50,
 			hide: 50,
@@ -100,14 +100,6 @@ export default {
 		},
 		defaultVariation: 'original',
 	},
-	domainSearchFilterOnClose: {
-		datestamp: '20180524',
-		variations: {
-			disabled: 50,
-			enabled: 50,
-		},
-		defaultVariation: 'disabled',
-	},
 	domainSuggestionKrakenV321: {
 		datestamp: '20180524',
 		variations: {
@@ -117,5 +109,13 @@ export default {
 			group_4: 10000,
 		},
 		defaultVariation: 'domainsbot',
+	},
+	domainSearchTLDFilterPlacement: {
+		datestamp: '20180531',
+		variations: {
+			belowFeatured: 50,
+			aboveFeatured: 50,
+		},
+		defaultVariation: 'belowFeatured',
 	},
 };

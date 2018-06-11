@@ -78,7 +78,6 @@ import { getCurrentUserId } from 'state/current-user/selectors';
 
 class ManagePurchase extends Component {
 	static propTypes = {
-		destinationType: PropTypes.string,
 		hasLoadedSites: PropTypes.bool.isRequired,
 		hasLoadedUserPurchasesFromServer: PropTypes.bool.isRequired,
 		purchase: PropTypes.object,
@@ -445,15 +444,13 @@ class ManagePurchase extends Component {
 				) }
 				<Main className={ classes }>
 					<HeaderCake backHref={ purchasesRoot }>{ titles.managePurchase }</HeaderCake>
-					{
-						<PurchaseNotice
-							isDataLoading={ isDataLoading( this.props ) }
-							handleRenew={ this.handleRenew }
-							selectedSite={ selectedSite }
-							purchase={ purchase }
-							editCardDetailsPath={ editCardDetailsPath }
-						/>
-					}
+					<PurchaseNotice
+						isDataLoading={ isDataLoading( this.props ) }
+						handleRenew={ this.handleRenew }
+						selectedSite={ selectedSite }
+						purchase={ purchase }
+						editCardDetailsPath={ editCardDetailsPath }
+					/>
 					{ this.renderPurchaseDetail() }
 				</Main>
 			</Fragment>

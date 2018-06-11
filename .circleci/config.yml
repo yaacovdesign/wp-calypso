@@ -4,7 +4,7 @@ jobs:
     parallelism: 6
     working_directory: ~/wp-calypso
     docker:
-      - image: circleci/node:8.11-browsers
+      - image: circleci/node:8.11.2-browsers
         environment:
           CIRCLE_ARTIFACTS: /tmp/artifacts
           CIRCLE_TEST_REPORTS: /tmp/test_results
@@ -35,10 +35,6 @@ jobs:
           key: v1-npmdeps-{{ checksum "npm-shrinkwrap.json" }}
           paths:
             - "node_modules"
-
-      - run:
-          name: Update the lockfile
-          command: CI_PULL_REQUEST='' npx greenkeeper-lockfile-update
 
       - run: NODE_ENV=test npm run build-server
 
@@ -76,10 +72,6 @@ jobs:
           name: Run Server Tests
           command: |
               npm run test-server:ci $(circleci tests glob "server/**/test/*.js" "server/**/test/*.jsx" | circleci tests split --split-by=timings)
-
-      - run:
-          name: Upload lockfile changes
-          command: npx greenkeeper-lockfile-update
 
       - run:
           name: Gather Test Results

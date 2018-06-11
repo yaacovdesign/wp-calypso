@@ -19,7 +19,6 @@
 		"pt-br"
 	],
 	"features": {
-		"activity-log-theme-update": true,
 		"activity-log-wpcom-free": true,
 		"ad-tracking": false,
 		"apple-pay": true,
@@ -31,6 +30,7 @@
 		"domains/cctlds/ca": true,
 		"domains/cctlds/fr": true,
 		"domains/cctlds/uk": true,
+		"domains/gdpr-consent-page": true,
 		"domains/kracken-ui/exact-match-filter": true,
 		"domains/kracken-ui/pagination": true,
 		"domains/kracken-ui/tld-filter": true,
@@ -60,6 +60,7 @@
 		"manage/customize": true,
 		"manage/edit-user": true,
 		"manage/import/medium": true,
+		"manage/import/blogger": false,
 		"manage/media": true,
 		"manage/option_sync_non_public_post_stati": false,
 		"manage/pages": true,
@@ -108,6 +109,7 @@
 		"reader/full-errors": true,
 		"reader/likes-hover": true,
 		"reader/nesting-arrow": true,
+		"reader/paste-to-link": true,
 		"reader/recommendations/posts": true,
 		"reader/related-posts": true,
 		"reader/search": true,
