@@ -51,9 +51,7 @@ class GoogleMyBusinessNewAccount extends Component {
 	};
 
 	handleConnect = () => {
-		this.props.recordTracksEventWithLocationCounts(
-			'calypso_google_my_business_new_account_connect'
-		);
+		this.props.recordTracksEventWithLocationCounts( 'calypso_google_my_business_new_account_connect' );
 
 		page.redirect( `/google-my-business/${ this.props.siteSlug }` );
 	};
@@ -132,9 +130,6 @@ export default connect(
 	{
 		dismissNudge,
 		recordTracksEvent: withEnhancers( recordTracksEvent, enhanceWithSiteType ),
-		recordTracksEventWithLocationCounts: withEnhancers( recordTracksEvent, [
-			enhanceWithLocationCounts,
-			enhanceWithSiteType,
-		] ),
+		recordTracksEventWithLocationCounts: withEnhancers( recordTracksEvent, [ enhanceWithLocationCounts, enhanceWithSiteType ] ),
 	}
 )( localize( GoogleMyBusinessNewAccount ) );

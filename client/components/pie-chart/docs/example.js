@@ -103,13 +103,16 @@ class PieChartExample extends Component {
 							return (
 								<div key={ seriesName }>
 									<h2>{ this.state[ seriesName ].name }</h2>
+
 									<input
 										name={ seriesName }
 										type="number"
 										value={ this.state[ seriesName ].value }
 										onChange={ this.changeValue }
 									/>
-									<label>{ 'Show' }</label>{' '}
+
+									<label>{ 'Show' }</label>{ ' ' }
+
 									<input
 										name={ seriesName }
 										type="checkbox"

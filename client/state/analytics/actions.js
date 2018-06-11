@@ -163,16 +163,14 @@ export const enhanceWithSiteType = ( action, getState ) => {
 	if ( site !== null ) {
 		return merge( action, {
 			meta: {
-				analytics: [
-					{
-						payload: {
-							properties: {
-								site_type: site.jetpack ? 'jetpack' : 'wpcom',
-							},
-						},
-					},
-				],
-			},
+				analytics: [ {
+					payload: {
+						properties: {
+							site_type: site.jetpack ? 'jetpack' : 'wpcom',
+						}
+					}
+				} ]
+			}
 		} );
 	}
 
