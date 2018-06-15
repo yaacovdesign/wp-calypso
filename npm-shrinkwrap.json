@@ -9218,14 +9218,14 @@
       "dev": true
     },
     "html-to-react": {
-      "version": "1.3.1",
-      "resolved": "https://registry.npmjs.org/html-to-react/-/html-to-react-1.3.1.tgz",
-      "integrity": "sha1-Db1/OPzklBkPZ0jVow/5YDvKOMs=",
+      "version": "1.3.3",
+      "resolved": "https://registry.npmjs.org/html-to-react/-/html-to-react-1.3.3.tgz",
+      "integrity": "sha512-4Qi5/t8oBr6c1t1kBJKyxEeJu0lb7ctvq29oFZioiUHH0Wz88VWGwoXuH26HDt9v64bDHA4NMPNTH8bVrcaJWA==",
       "requires": {
         "domhandler": "^2.3.0",
         "escape-string-regexp": "^1.0.5",
         "htmlparser2": "^3.8.3",
-        "ramda": "^0.24.1",
+        "ramda": "^0.25.0",
         "underscore.string.fp": "^1.0.4"
       }
     },
@@ -15297,9 +15297,9 @@
       "dev": true
     },
     "ramda": {
-      "version": "0.24.1",
-      "resolved": "https://registry.npmjs.org/ramda/-/ramda-0.24.1.tgz",
-      "integrity": "sha1-w7d1UZfzW43DUCIoJixMkd22uFc="
+      "version": "0.25.0",
+      "resolved": "https://registry.npmjs.org/ramda/-/ramda-0.25.0.tgz",
+      "integrity": "sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ=="
     },
     "randexp": {
       "version": "0.4.6",
