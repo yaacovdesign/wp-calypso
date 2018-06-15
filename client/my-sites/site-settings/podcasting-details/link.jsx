@@ -23,7 +23,7 @@ class PodcastingLink extends Component {
 		if ( isPrivate ) {
 			return (
 				<div className="podcasting-details__link">
-					<SectionHeader label={ translate( 'Podcasting' ) } />
+					<SectionHeader label={ translate( 'Podcasting' ) } id="site-podcasting-settings" />
 					<Card className="podcasting-details__link-card">
 						<PodcastingPrivateSiteMessage />
 					</Card>
@@ -37,7 +37,7 @@ class PodcastingLink extends Component {
 
 		return (
 			<div className="podcasting-details__link">
-				<SectionHeader label={ translate( 'Podcasting' ) } />
+				<SectionHeader label={ translate( 'Podcasting' ) } id="site-podcasting-settings" />
 				<Card className="podcasting-details__link-card" href={ detailsLink }>
 					<div className="podcasting-details__link-title">
 						{ podcastingEnabled
