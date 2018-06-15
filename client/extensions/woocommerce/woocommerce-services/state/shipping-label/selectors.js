@@ -139,7 +139,7 @@ export const getTotalPriceBreakdown = ( state, orderId, siteId = getSelectedSite
 		: null;
 };
 
-export const needsCustomsForm = createSelector(
+export const isCustomsFormRequired = createSelector(
 	( state, orderId, siteId = getSelectedSiteId( state ) ) => {
 		const form = getForm( state, orderId, siteId );
 		if ( isEmpty( form ) ) {
@@ -509,7 +509,7 @@ export const getFirstErroneousStep = ( state, orderId, siteId = getSelectedSiteI
 	}
 
 	if (
-		needsCustomsForm( state, orderId, siteId ) &&
+		isCustomsFormRequired( state, orderId, siteId ) &&
 		( hasNonEmptyLeaves( errors.customs ) ||
 			! isCustomsFormStepSubmitted( state, orderId, siteId ) )
 	) {
