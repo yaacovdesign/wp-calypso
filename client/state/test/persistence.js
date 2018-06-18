@@ -5,6 +5,9 @@
 import { DESERIALIZE, SERIALIZE } from 'state/action-types';
 import { createReduxStore, reducer } from 'state';
 
+jest.mock( 'lib/user', () => () => {} );
+jest.mock( 'lib/signup/step-actions', () => ( {} ) );
+
 describe( 'persistence', () => {
 	test( 'initial state should serialize and deserialize without errors or warnings', () => {
 		const consoleErrorSpy = jest
