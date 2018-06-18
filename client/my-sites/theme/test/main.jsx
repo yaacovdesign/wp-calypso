@@ -17,6 +17,7 @@ import { receiveTheme, themeRequestFailure } from 'state/themes/actions';
 jest.mock( 'components/data/query-user-purchases', () => require( 'components/empty-component' ) );
 jest.mock( 'components/data/query-site-purchases', () => require( 'components/empty-component' ) );
 jest.mock( 'lib/analytics', () => ( {} ) );
+jest.mock( 'lib/signup/step-actions', () => ( {} ) );
 jest.mock( 'lib/user', () => () => {} );
 jest.mock( 'lib/wp', () => ( {
 	undocumented: () => ( {

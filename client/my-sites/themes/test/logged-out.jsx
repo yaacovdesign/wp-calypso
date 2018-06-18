@@ -21,6 +21,8 @@ jest.mock( 'lib/abtest', () => ( { abtest: () => {} } ) );
 jest.mock( 'lib/analytics', () => ( {} ) );
 jest.mock( 'lib/analytics/page-view-tracker', () => require( 'components/empty-component' ) );
 jest.mock( 'my-sites/themes/theme-preview', () => require( 'components/empty-component' ) );
+jest.mock( 'lib/signup/step-actions', () => ( {} ) );
+jest.mock( 'lib/user', () => () => {} );
 
 describe( 'logged-out', () => {
 	describe( 'when calling renderToString()', () => {
