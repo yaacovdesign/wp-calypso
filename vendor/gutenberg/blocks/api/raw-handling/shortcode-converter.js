@@ -13,7 +13,7 @@ import { getBlockAttributes } from '../parser';
 /**
  * Browser dependencies
  */
-const { shortcode } = window.wp;
+import shortcode from '@wordpress/shortcode';
 
 function segmentHTMLToShortcodeBlock( HTML, lastIndex = 0 ) {
 	// Get all matches.
