@@ -6,7 +6,7 @@ import { shallow } from 'enzyme';
 /**
  * WordPress dependencies
  */
-import { createElement } from '@wordpress/element';
+import React, { createElement } from 'react';
 
 /**
  * Internal dependencies

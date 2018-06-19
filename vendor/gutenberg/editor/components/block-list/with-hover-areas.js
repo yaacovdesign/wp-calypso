@@ -1,7 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { Component, findDOMNode, createHigherOrderComponent } from '@wordpress/element';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import { createHigherOrderComponent } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 
 const withHoverAreas = createHigherOrderComponent( ( WrappedComponent ) => {

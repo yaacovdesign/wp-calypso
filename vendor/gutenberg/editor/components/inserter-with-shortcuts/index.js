@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { filter, isEmpty } from 'lodash';
+import React from 'react';
 
 /**
  * WordPress dependencies

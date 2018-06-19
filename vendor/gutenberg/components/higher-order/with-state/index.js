@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { Component, createHigherOrderComponent } from '@wordpress/element';
+import React, { Component } from 'react';
+import { createHigherOrderComponent } from '@wordpress/element';
 
 /**
  * A Higher Order Component used to provide and manage internal component state

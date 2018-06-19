@@ -6,7 +6,7 @@ import { pick, noop } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 /**
  * The RichText Provider allows a rendering context to define global behaviors

@@ -2,7 +2,7 @@
  * WordPress
  */
 import { __ } from '@wordpress/i18n';
-import { Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
 import { createBlock } from '@wordpress/blocks';
 import {
 	RichText,

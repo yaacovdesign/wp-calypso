@@ -14,7 +14,7 @@ import Provider from '../provider';
 /**
  * WordPress Dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 class Filler extends Component {
 	constructor() {

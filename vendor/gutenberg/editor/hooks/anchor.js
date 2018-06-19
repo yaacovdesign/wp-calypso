@@ -6,7 +6,8 @@ import { assign } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { createHigherOrderComponent, Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
+import { createHigherOrderComponent } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';

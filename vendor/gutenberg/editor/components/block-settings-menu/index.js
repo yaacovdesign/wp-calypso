@@ -8,7 +8,7 @@ import { castArray } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { IconButton, Dropdown, NavigableMenu } from '@wordpress/components';
 import { withDispatch } from '@wordpress/data';
 

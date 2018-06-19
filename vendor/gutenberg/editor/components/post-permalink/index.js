@@ -7,7 +7,8 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { withDispatch, withSelect } from '@wordpress/data';
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ClipboardButton, Button } from '@wordpress/components';
 

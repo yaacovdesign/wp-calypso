@@ -7,6 +7,7 @@ import { getBlockType, getPossibleBlockTransformations, switchToBlockType } from
 import { compose } from '@wordpress/element';
 import { keycodes } from '@wordpress/utils';
 import { withSelect, withDispatch } from '@wordpress/data';
+import React from 'react';
 
 /**
  * Internal dependencies

@@ -4,6 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { Toolbar } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
+import React from 'react';
 
 const BLOCK_ALIGNMENTS_CONTROLS = {
 	left: {

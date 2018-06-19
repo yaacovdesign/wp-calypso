@@ -6,7 +6,7 @@ import { noop } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { __ } from '@wordpress/i18n';
 import { Button, ClipboardButton } from '@wordpress/components';
 

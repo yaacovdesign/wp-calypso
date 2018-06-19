@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { createSlotFill, Toolbar } from '@wordpress/components';
+import React from 'react';
 
 /**
  * Internal dependencies

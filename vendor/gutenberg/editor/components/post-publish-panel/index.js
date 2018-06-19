@@ -7,7 +7,8 @@ import { get } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { compose, Component } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { IconButton, Spinner } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 

@@ -8,7 +8,7 @@ import classnames from 'classnames';
  */
 import './style.scss';
 import { __ } from '@wordpress/i18n';
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { IconButton } from '@wordpress/components';
 
 /**

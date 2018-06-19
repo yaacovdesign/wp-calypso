@@ -6,7 +6,7 @@ import { reduce } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 /**
  * Component which renders a div with passed props applied except the optional

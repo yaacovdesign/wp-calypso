@@ -18,7 +18,8 @@ import 'element-closest';
 /**
  * WordPress dependencies
  */
-import { Component, Fragment, compose, RawHTML, createRef } from '@wordpress/element';
+import React, { Component, Fragment, createRef } from 'react';
+import { compose, RawHTML } from '@wordpress/element';
 import {
 	isHorizontalEdge,
 	getRectangleFromRange,

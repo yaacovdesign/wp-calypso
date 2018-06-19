@@ -6,7 +6,8 @@ import { defer } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component, createRef, compose } from '@wordpress/element';
+import React, { Component, createRef } from 'react';
+import { compose } from '@wordpress/element';
 import { Popover, Button, IconButton } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { withSelect, withDispatch } from '@wordpress/data';

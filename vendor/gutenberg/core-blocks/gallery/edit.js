@@ -6,7 +6,7 @@ import { filter, pick } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	IconButton,

@@ -7,7 +7,7 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import {
 	Dashicon,
 	IconButton,

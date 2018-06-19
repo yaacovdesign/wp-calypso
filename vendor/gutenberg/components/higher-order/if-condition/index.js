@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import React from 'react';
 import { createHigherOrderComponent } from '@wordpress/element';
 
 /**

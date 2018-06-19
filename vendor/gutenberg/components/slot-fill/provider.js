@@ -6,7 +6,7 @@ import { pick, sortBy, forEach, without, noop } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 class SlotFillProvider extends Component {
 	constructor() {

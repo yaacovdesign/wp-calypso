@@ -6,13 +6,9 @@ import { debounce, includes } from 'lodash';
 /**
  * WordPress dependencies
  */
-import {
-	Component,
-	Children,
-	cloneElement,
-	findDOMNode,
-	concatChildren,
-} from '@wordpress/element';
+import React, { Component, Children, cloneElement } from 'react';
+import { findDOMNode } from 'react-dom';
+import { concatChildren } from '@wordpress/element';
 
 /**
  * Internal dependencies

@@ -13,7 +13,9 @@ import './style.scss';
 /**
  * External dependencies
  */
-export default class Dashicon extends wp.element.Component {
+import React, { Component } from 'react';
+
+export default class Dashicon extends Component {
 	shouldComponentUpdate( nextProps ) {
 		return (
 			this.props.icon !== nextProps.icon ||

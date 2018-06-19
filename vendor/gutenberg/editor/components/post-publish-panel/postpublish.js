@@ -8,7 +8,7 @@ import { get } from 'lodash';
  */
 import { PanelBody, Button, ClipboardButton } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import { withSelect } from '@wordpress/data';
 
 /**

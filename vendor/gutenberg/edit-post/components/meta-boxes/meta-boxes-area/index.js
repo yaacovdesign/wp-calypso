@@ -6,7 +6,7 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { Spinner } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 

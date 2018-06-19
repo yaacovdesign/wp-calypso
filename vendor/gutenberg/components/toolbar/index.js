@@ -3,6 +3,7 @@
  */
 import classnames from 'classnames';
 import { flatMap } from 'lodash';
+import React from 'react';
 
 /**
  * Internal dependencies

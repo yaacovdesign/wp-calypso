@@ -6,7 +6,7 @@ import scrollIntoView from 'dom-scroll-into-view';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { withSelect } from '@wordpress/data';
 import { getScrollContainer } from '@wordpress/dom';
 

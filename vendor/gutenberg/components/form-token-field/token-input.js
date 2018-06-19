@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 class TokenInput extends Component {
 	constructor() {

@@ -10,7 +10,7 @@ import { stringify } from 'querystringify';
  * WordPress dependencies
  */
 import { __, sprintf, _n } from '@wordpress/i18n';
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import { keycodes, decodeEntities } from '@wordpress/utils';
 import { Spinner, withInstanceId, withSpokenMessages, Popover } from '@wordpress/components';
 import apiRequest from '@wordpress/api-request';

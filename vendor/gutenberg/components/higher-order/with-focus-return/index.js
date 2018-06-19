@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 /**
  * Higher Order Component used to be used to wrap disposable elements like

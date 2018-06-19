@@ -9,7 +9,8 @@ import { get } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { keycodes, decodeEntities } from '@wordpress/utils';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { KeyboardShortcuts, withInstanceId, withFocusOutside } from '@wordpress/components';

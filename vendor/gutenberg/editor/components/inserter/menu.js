@@ -20,7 +20,9 @@ import scrollIntoView from 'dom-scroll-into-view';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component, compose, findDOMNode, createRef } from '@wordpress/element';
+import React, { Component, createRef } from 'react';
+import { findDOMNode } from 'react-dom';
+import { compose } from '@wordpress/element';
 import {
 	withInstanceId,
 	withSpokenMessages,

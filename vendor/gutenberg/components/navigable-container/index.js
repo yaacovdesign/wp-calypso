@@ -6,7 +6,7 @@ import { omit, noop, includes } from 'lodash';
 /**
  * WordPress Dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { focus } from '@wordpress/dom';
 import { keycodes } from '@wordpress/utils';
 

@@ -10,7 +10,8 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { IconButton, withInstanceId } from '@wordpress/components';
 import { getBlockType } from '@wordpress/blocks';
-import { compose, Component } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { withSelect, withDispatch } from '@wordpress/data';
 
 /**

@@ -9,7 +9,7 @@ import classnames from 'classnames';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { Toolbar } from '@wordpress/components';
-import { Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
 import { createBlock, getPhrasingContentSchema } from '@wordpress/blocks';
 import {
 	BlockControls,

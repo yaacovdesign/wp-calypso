@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { withSelect } from '@wordpress/data';
 
 class UnsavedChangesWarning extends Component {

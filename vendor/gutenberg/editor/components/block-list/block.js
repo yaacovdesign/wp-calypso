@@ -8,7 +8,9 @@ import tinymce from 'tinymce';
 /**
  * WordPress dependencies
  */
-import { Component, findDOMNode, Fragment, compose } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
+import { findDOMNode } from 'react-dom';
+import { compose } from '@wordpress/element';
 import {
 	focus,
 	isTextField,

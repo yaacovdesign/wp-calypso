@@ -6,7 +6,7 @@ import { every, isEqual } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 export default ( mapNodeToProps ) => ( WrappedComponent ) => {
 	return class extends Component {

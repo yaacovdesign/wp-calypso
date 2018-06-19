@@ -14,7 +14,8 @@ import {
 	getBlockTransforms,
 	findTransform,
 } from '@wordpress/blocks';
-import { compose, Component } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 
 /**

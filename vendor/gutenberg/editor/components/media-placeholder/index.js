@@ -14,7 +14,7 @@ import {
 	DropZone,
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 /**
  * Internal dependencies

@@ -8,7 +8,8 @@ import { isEqual } from 'lodash';
 /**
  * WordPress Dependencies
  */
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { getBlockAttributes, getBlockContent, getBlockType, isValidBlock } from '@wordpress/blocks';
 import { withSelect, withDispatch } from '@wordpress/data';
 

@@ -6,7 +6,7 @@ import { isFunction } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import FormToggle from '../form-toggle';
 import withInstanceId from '../higher-order/with-instance-id';
 

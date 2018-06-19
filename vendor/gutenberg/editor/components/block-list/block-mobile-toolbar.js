@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { ifViewportMatches } from '@wordpress/viewport';
+import React from 'react';
 
 /**
  * Internal dependencies

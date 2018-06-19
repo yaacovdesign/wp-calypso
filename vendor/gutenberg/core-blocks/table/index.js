@@ -7,7 +7,7 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
 import { getPhrasingContentSchema } from '@wordpress/blocks';
 import {
 	BlockControls,

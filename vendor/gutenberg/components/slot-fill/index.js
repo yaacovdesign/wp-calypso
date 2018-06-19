@@ -4,6 +4,7 @@
 import Slot from './slot';
 import Fill from './fill';
 import Provider from './provider';
+import React from 'react';
 
 export { Slot };
 export { Fill };

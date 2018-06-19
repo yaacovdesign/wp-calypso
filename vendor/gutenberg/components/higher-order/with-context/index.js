@@ -6,7 +6,7 @@ import { noop } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 const withContext = ( contextName ) => ( mapSettingsToProps ) => ( OriginalComponent ) => {
 	class WrappedComponent extends Component {

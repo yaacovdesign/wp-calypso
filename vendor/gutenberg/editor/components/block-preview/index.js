@@ -7,7 +7,7 @@ import { noop } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { createBlock } from '@wordpress/blocks';
 
 /**

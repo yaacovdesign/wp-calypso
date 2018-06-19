@@ -3,6 +3,7 @@
  */
 import classnames from 'classnames';
 import { assign, includes } from 'lodash';
+import React from 'react';
 
 /**
  * WordPress dependencies

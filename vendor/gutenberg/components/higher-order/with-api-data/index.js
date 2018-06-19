@@ -6,7 +6,8 @@ import { mapValues, reduce, forEach, noop } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component, createHigherOrderComponent } from '@wordpress/element';
+import React, { Component } from 'react';
+import { createHigherOrderComponent } from '@wordpress/element';
 
 /**
  * Internal dependencies

@@ -6,7 +6,7 @@ import { mount } from 'enzyme';
 /**
  * External dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 /**
  * Internal dependencies

@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import React from 'react';
 
 /**
  * Internal dependencies

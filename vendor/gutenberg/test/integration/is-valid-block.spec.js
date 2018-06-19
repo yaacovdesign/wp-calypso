@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { isValidBlock } from '@wordpress/blocks';
-import { createElement } from '@wordpress/element';
+import React, { createElement } from 'react';
 
 describe( 'isValidBlock', () => {
 	beforeAll( () => {

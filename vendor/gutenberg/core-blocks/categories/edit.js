@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import { PanelBody, Placeholder, Spinner, ToggleControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';

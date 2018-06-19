@@ -8,11 +8,10 @@ import { isFinite, find, omit } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import React, { Component, Fragment } from 'react';
 import {
 	concatChildren,
-	Component,
 	compose,
-	Fragment,
 	RawHTML,
 } from '@wordpress/element';
 import {

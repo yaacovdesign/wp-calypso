@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { IconButton, Toolbar } from '@wordpress/components';
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import {
 	MediaPlaceholder,
 	RichText,

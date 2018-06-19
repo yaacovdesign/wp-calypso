@@ -7,7 +7,8 @@ import { noop, get } from 'lodash';
  * WordPress dependencies
  */
 import { withSelect } from '@wordpress/data';
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { withContext, withAPIData } from '@wordpress/components';
 
 /**

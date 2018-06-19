@@ -7,7 +7,7 @@ import { castArray, pick } from 'lodash';
  * WordPress dependencies
  */
 import { parseWithAttributeSchema } from '@wordpress/blocks';
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { __ } from '@wordpress/i18n';
 
 // Getter for the sake of unit tests.

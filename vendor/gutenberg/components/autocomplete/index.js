@@ -7,7 +7,8 @@ import { escapeRegExp, find, filter, map, debounce } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component, compose, renderToString } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose, renderToString } from '@wordpress/element';
 import { keycodes } from '@wordpress/utils';
 import { __, _n, sprintf } from '@wordpress/i18n';
 

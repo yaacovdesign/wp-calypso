@@ -6,7 +6,7 @@ import clickOutside from 'react-click-outside';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 class PopoverDetectOutside extends Component {
 	handleClickOutside( event ) {

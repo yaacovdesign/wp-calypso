@@ -7,7 +7,7 @@ import { isString, isArray } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 /**
  * Internal dependencies

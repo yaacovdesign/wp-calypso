@@ -1,6 +1,8 @@
 /**
  * External dependencies
  */
+
+import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { flowRight, without, mapValues, overEvery } from 'lodash';
 

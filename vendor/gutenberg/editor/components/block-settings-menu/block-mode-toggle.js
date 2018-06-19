@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { noop } from 'lodash';
+import React from 'react';
 
 /**
  * WordPress dependencies

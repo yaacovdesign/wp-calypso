@@ -3,6 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Toolbar } from '@wordpress/components';
+import React from 'react';
 
 const ALIGNMENT_CONTROLS = [
 	{

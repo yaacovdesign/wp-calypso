@@ -3,7 +3,7 @@
  */
 import classnames from 'classnames';
 import { isString } from 'lodash';
-
+import React from 'react';
 /**
  * Internal dependencies
  */

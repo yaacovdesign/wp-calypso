@@ -8,7 +8,7 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { IconButton, PanelBody, RangeControl, ToggleControl, Toolbar } from '@wordpress/components';
-import { Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
 import { __ } from '@wordpress/i18n';
 import { createBlock } from '@wordpress/blocks';
 import {

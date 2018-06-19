@@ -9,7 +9,7 @@ import { stringify } from 'querystringify';
 /**
  * WordPress dependencies
  */
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import {
 	PanelBody,
 	Placeholder,

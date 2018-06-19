@@ -8,7 +8,7 @@ import moment from 'moment';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 
 /**
  * Internal dependencies

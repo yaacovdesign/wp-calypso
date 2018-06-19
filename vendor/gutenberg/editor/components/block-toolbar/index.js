@@ -2,6 +2,7 @@
  * WordPress Dependencies
  */
 import { withSelect } from '@wordpress/data';
+import React from 'react';
 
 /**
  * Internal Dependencies

@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
 import { Toolbar, DropdownMenu } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {

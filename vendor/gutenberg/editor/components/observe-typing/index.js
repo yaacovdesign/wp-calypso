@@ -6,7 +6,8 @@ import { includes } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { isTextField } from '@wordpress/dom';
 import { keycodes } from '@wordpress/utils';

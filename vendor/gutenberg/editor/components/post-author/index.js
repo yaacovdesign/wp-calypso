@@ -3,7 +3,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { withInstanceId } from '@wordpress/components';
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { withSelect, withDispatch } from '@wordpress/data';
 
 /**

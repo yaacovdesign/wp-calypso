@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { serialize } from '@wordpress/blocks';
 import { documentHasSelection } from '@wordpress/dom';
 import { withSelect, withDispatch } from '@wordpress/data';

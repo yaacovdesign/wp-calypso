@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { compose, Component, Fragment } from '@wordpress/element';
+import React, { Component, Fragment } from 'react';
+import { compose } from '@wordpress/element';
 import { Toolbar } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 

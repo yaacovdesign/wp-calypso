@@ -2,7 +2,8 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { compose } from '@wordpress/element';
 import { withInstanceId } from '@wordpress/components';
 import { withSelect, withDispatch } from '@wordpress/data';
 

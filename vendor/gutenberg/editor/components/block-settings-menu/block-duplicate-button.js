@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { flow, noop, last, every, first, castArray } from 'lodash';
+import React from 'react';
 
 /**
  * WordPress dependencies

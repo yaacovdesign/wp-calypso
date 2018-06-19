@@ -7,7 +7,8 @@ import { cond, matchesProperty } from 'lodash';
  * WordPress dependencies
  */
 import { NavigableMenu, KeyboardShortcuts } from '@wordpress/components';
-import { Component, findDOMNode } from '@wordpress/element';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import { focus } from '@wordpress/dom';
 import { keycodes } from '@wordpress/utils';
 

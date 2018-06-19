@@ -7,7 +7,8 @@ import { get } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { createHigherOrderComponent, Component, compose } from '@wordpress/element';
+import React, { Component } from 'react';
+import { createHigherOrderComponent, compose } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 
 /**

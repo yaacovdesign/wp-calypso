@@ -7,7 +7,7 @@ import { noop } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component, createRef } from '@wordpress/element';
+import React, { Component, createRef } from 'react';
 import { focus } from '@wordpress/dom';
 import { keycodes } from '@wordpress/utils';
 

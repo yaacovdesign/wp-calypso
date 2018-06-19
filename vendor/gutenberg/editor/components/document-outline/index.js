@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { countBy, flatMap, get } from 'lodash';
+import React from 'react';
 
 /**
  * WordPress dependencies

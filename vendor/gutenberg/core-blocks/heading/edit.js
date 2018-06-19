@@ -3,7 +3,7 @@
  */
 
 import { __, sprintf } from '@wordpress/i18n';
-import { Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
 import { PanelBody, Toolbar } from '@wordpress/components';
 import { createBlock } from '@wordpress/blocks';
 import { RichText, BlockControls, InspectorControls, AlignmentToolbar } from '@wordpress/editor';

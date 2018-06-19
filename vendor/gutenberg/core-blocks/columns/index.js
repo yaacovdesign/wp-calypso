@@ -10,7 +10,7 @@ import memoize from 'memize';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { PanelBody, RangeControl } from '@wordpress/components';
-import { Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
 import {
 	InspectorControls,
 	InnerBlocks,

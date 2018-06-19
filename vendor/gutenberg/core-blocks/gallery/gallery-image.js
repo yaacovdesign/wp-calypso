@@ -6,7 +6,7 @@ import classnames from 'classnames';
 /**
  * WordPress Dependencies
  */
-import { Component } from '@wordpress/element';
+import React, { Component } from 'react';
 import { IconButton, Spinner } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { keycodes } from '@wordpress/utils';

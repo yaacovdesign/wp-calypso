@@ -6,7 +6,8 @@ import { noop } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { createContext, createHigherOrderComponent } from '@wordpress/element';
+import React, { createContext } from 'react';
+import { createHigherOrderComponent } from '@wordpress/element';
 
 const { Consumer, Provider } = createContext( {
 	name: '',

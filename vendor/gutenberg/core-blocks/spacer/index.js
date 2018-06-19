@@ -6,7 +6,7 @@ import ResizableBox from 're-resizable';
 /**
  * WordPress
  */
-import { Fragment } from '@wordpress/element';
+import React, { Fragment } from 'react';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/editor';
 import { BaseControl, PanelBody, withInstanceId } from '@wordpress/components';

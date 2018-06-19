@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { Dashicon } from '@wordpress/components';
-import { createElement, Component } from '@wordpress/element';
+import React, { createElement, Component } from 'react';
 
 export default function BlockIcon( { icon } ) {
 	if ( 'string' === typeof icon ) {

@@ -6,7 +6,7 @@ import { noop, map, isString, isFunction } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Component, Children, cloneElement } from '@wordpress/element';
+import React, { Component, Children, cloneElement } from 'react';
 
 class Slot extends Component {
 	constructor() {
