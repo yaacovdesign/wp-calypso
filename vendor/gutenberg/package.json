@@ -101,23 +101,6 @@
 		"webpack-livereload-plugin": "2.1.1",
 		"webpack-rtl-plugin": "github:yoavf/webpack-rtl-plugin#develop"
 	},
-	"babel": {
-		"presets": [
-			"@wordpress/default"
-		],
-		"env": {
-			"production": {
-				"plugins": [
-					[
-						"@wordpress/babel-plugin-makepot",
-						{
-							"output": "languages/gutenberg.pot"
-						}
-					]
-				]
-			}
-		}
-	},
 	"npmPackageJsonLintConfig": {
 		"extends": "@wordpress/npm-package-json-lint-config",
 		"rules": {
