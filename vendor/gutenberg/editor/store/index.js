@@ -8,6 +8,7 @@ import {
 	withRehydration,
 	loadAndPersist,
 } from '@wordpress/data';
+import userSettings from '@wordpress/usersettings';
 
 /**
  * Internal dependencies
@@ -20,7 +21,7 @@ import * as actions from './actions';
 /**
  * Module Constants
  */
-const STORAGE_KEY = `GUTENBERG_PREFERENCES_${ window.userSettings.uid }`;
+const STORAGE_KEY = `GUTENBERG_PREFERENCES_${ userSettings.uid }`;
 const MODULE_KEY = 'core/editor';
 
 const store = applyMiddlewares(
