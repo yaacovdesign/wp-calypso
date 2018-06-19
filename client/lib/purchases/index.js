@@ -173,11 +173,7 @@ function isRemovable( purchase ) {
 	}
 
 	return (
-		isExpiring( purchase ) ||
-		isExpired( purchase ) ||
-		( isDomainTransfer( purchase ) &&
-			! isRefundable( purchase ) &&
-			isPurchaseCancelable( purchase ) )
+		isDomainTransfer( purchase ) && ! isRefundable( purchase ) && isPurchaseCancelable( purchase )
 	);
 }
 
